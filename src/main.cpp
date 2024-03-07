@@ -85,8 +85,6 @@ Maze m;
 m.initGrid(0,8,3,3);
 m.print();
 
-return 0;
-
 
 
 } 
