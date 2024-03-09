@@ -3,6 +3,8 @@
 void Maze::initGrid(int start, int finish, int sizeR,
                     int sizeC) { // nodefault per sizeC?? //start e finish come
                                  // li uso nel ptr???
+  rows = sizeR;
+  columns = sizeC;
 
   // reserve space for the exact amount of symmetric edge
   adjMatrix.reserve(sizeR * (sizeC - 1) + sizeC * (sizeR - 1));
@@ -22,7 +24,7 @@ void EdgeAdjMatrix::print() {
 
   cout << endl;
   cout << this->node << " ";
-  cout << this->adj;
+  cout << this->adj << " ";
   cout << this->edgeType;
   cout << "-----" << endl;
 }

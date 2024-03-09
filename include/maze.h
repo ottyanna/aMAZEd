@@ -48,6 +48,8 @@ struct EdgeAdjMatrix {
 
 struct Maze {
 
+  int rows;
+  int columns;
   vector<EdgeAdjMatrix> adjMatrix;
   // manca vett di puntatori a nodi
 

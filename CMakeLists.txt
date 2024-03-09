@@ -7,6 +7,10 @@ project(aMAZEd,
 	LANGUAGES CXX
 )
 
+find_package(glfw3 3.4 REQUIRED)
+find_package(OpenGL REQUIRED)
+find_package( Threads )
+
 # Our "project" will be able to build an executable out of a C++ source file
 add_executable(exe
    	 src/main.cpp
@@ -14,13 +18,26 @@ add_executable(exe
 
 # Our project will be able to build a library
 add_library(Lib
-	src/maze.cpp)
+	src/maze.cpp
+	src/draw.cpp)
 
 # This is needed if we keep .h files in the "include" directory
 target_include_directories(Lib PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
 )
+
+target_link_libraries(
+	Lib PUBLIC
+	glfw)
+
+target_link_libraries(
+	Lib PUBLIC 
+	OpenGL::GL)
+
+target_link_libraries( 
+	exe PUBLIC 
+	${CMAKE_THREAD_LIBS_INIT} )
 
 # Target commands tells which dependencies targer exec have
 target_link_libraries(
