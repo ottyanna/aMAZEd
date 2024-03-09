@@ -12,6 +12,22 @@ add_executable(exe
    	 src/main.cpp
 )
 
+# Our project will be able to build a library
+add_library(Lib
+	src/maze.cpp)
+
+# This is needed if we keep .h files in the "include" directory
+target_include_directories(Lib PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
+
+# Target commands tells which dependencies targer exec have
+target_link_libraries(
+    exe PUBLIC 
+    Lib
+)
+
 # Force the compiler to use the C++17 standard
 target_compile_features(exe PUBLIC cxx_std_17)
 
