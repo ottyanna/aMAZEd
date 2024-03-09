@@ -1,3 +1,5 @@
 *.o
 build
 exe
+compile_commands.json
+.clangd/
