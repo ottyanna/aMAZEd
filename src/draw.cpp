@@ -1,12 +1,14 @@
 #include "draw.h"
+#include <GL/gl.h>
+
+GLfloat pointX(int coo, int N) { return (2.0 * coo - N) / (N + 1.0); }
+GLfloat pointY(int coo, int N) { return (-2.0 * coo - N) / (N + 1.0); }
 
 int draw(Maze &maze) {
 
-  maze.print();
-
   int lineWidth = 12;
-  float gridSizeC = maze.columns;
-  float gridSizeR = maze.rows;
+  float gridSizeC = maze.nColumns;
+  float gridSizeR = maze.nRows;
 
   GLFWwindow *window;
 
@@ -14,9 +16,12 @@ int draw(Maze &maze) {
   if (!glfwInit())
     return -1;
 
+  GLfloat ratio = maze.nColumns / maze.nRows;
+  GLint wHeight = 500;
+  GLint wWidth = wHeight * ratio;
+
   /* Create a windowed mode window and its OpenGL context */
-  window = glfwCreateWindow(500, 500 * maze.rows / maze.columns, "Maze Solver",
-                            NULL, NULL);
+  window = glfwCreateWindow(wWidth, wHeight, "Maze Solver ", NULL, NULL);
   if (!window) {
     glfwTerminate();
     return -1;
@@ -30,10 +35,10 @@ int draw(Maze &maze) {
     /* Render here */
     glClear(GL_COLOR_BUFFER_BIT);
 
-    int maxPathIndex = 0;
+    // int maxPathIndex = 0;
 
-    for (int y = 0; y < maze.rows; y++) {
-      for (int x = 0; x < maze.columns; x++) {
+    for (int y = 0; y < maze.nRows; y++) {
+      for (int x = 0; x < maze.nColumns; x++) {
 
         // j is y
         // i is x
@@ -56,107 +61,86 @@ int draw(Maze &maze) {
           glColor3f(0.6, 0.6, 1);
         } else if (cpathIndex > 0) {
           glColor3f(1, 0.6, 0.6);
-        } else {
-          glColor3f(1, 1, 1);
+        } else {/*
+
+          glColor3f(1, 1, 1); //background color
         }
         */
 
         glBegin(GL_QUADS);
 
-        glVertex2f(-1 + (2 * x) / gridSizeC, 1 - (2 * y) / gridSizeR);
-        glVertex2f(-1 + (2 * x) / gridSizeC + 2 / gridSizeC,
-                   1 - (2 * y) / gridSizeR);
-        glVertex2f(-1 + (2 * x) / gridSizeC + 2 / gridSizeC,
-                   1 - ((2 * y) / gridSizeR) - 2 / gridSizeR);
-        glVertex2f(-1 + (2 * x) / gridSizeC,
-                   1 - ((2 * y) / gridSizeR) - 2 / gridSizeR);
+        glColor3f(0, 1, 0);
+
+        glVertex2f(pointX(x + 0.5, gridSizeC), pointY(y + 0.5, gridSizeR));
+        glVertex2f(pointX(x + 0.5, gridSizeC), pointY(y - 0.5, gridSizeR));
+        glVertex2f(pointX(x - 0.5, gridSizeC), pointY(y + 0.5, gridSizeR));
+        glVertex2f(pointX(x - 0.5, gridSizeC), pointY(y - 0.5, gridSizeR));
 
         glEnd();
 
-        glColor3f(0.3, 0, 0);
+        glBegin(GL_POINTS);
+        glColor3f(1, 0, 0); // background color
+        // set size to 1 for a group of points
+        glPointSize(10);
 
-        /*
-            // vertical walls
-            if (walls[i + j * size][0] == 0) {
-              for (int l = 1; l < lineWidth; l++) {
-                glBegin(GL_LINES);
-                glVertex2f(-1 + (2 * i) / gridSize + 0.001 * l,
-                           1 - (2 * j) / gridSize);
-                glVertex2f(-1 + (2 * i) / gridSize + 0.001 * l,
-                           1 - ((2 * j) / gridSize) - 2 / gridSize);
-                glEnd();
-              }
-            }
+        glVertex2f(pointX(x, gridSizeC), pointY(y, gridSizeR));
+        // glVertex2f((2.0 * x) / gridSizeC - 1.0, 1.0 - (2.0 * y) / gridSizeR);
+        glEnd();
 
-            // horizontal walls
-            if (walls[i + j * size][1] == 0) {
-              for (int l = 1; l < lineWidth; l++) {
-                glBegin(GL_LINES);
-                glVertex2f(-1 + (2 * i) / gridSize,
-                           1 - (2 * j) / gridSize + 0.001 * l);
-                glVertex2f(-1 + (2 * i) / gridSize + 2 / gridSize,
-                           1 - (2 * j) / gridSize + 0.001 * l);
-                glEnd();
-              }
-            }*/
+        glColor3f(0, 0, 1); // line color
 
-        /*
-        for (auto u : maze.adjMatrix) {
-          if (x + y * maze.columns == u.node) {
-            cout << u.node;
-            cout << "heloo " << endl;
-            if (u.edgeType == WALL) {
-              if (u.adj == u.node + maze.columns) {
-                for (int l = 1; l < lineWidth; l++) {
-                  glBegin(GL_LINES);
-                  glVertex2f(-1 + (2 * x) / gridSizeC,
-                             1 - (2 * y) / gridSizeR + 0.001 * l);
-                  glVertex2f(-1 + (2 * x) / gridSizeC + 2 / gridSizeC,
-                             1 - (2 * y) / gridSizeR + 0.001 * l);
-                  glEnd();
-                }
-              } else {
-                for (int l = 1; l < lineWidth; l++) {
-                  glBegin(GL_LINES);
-                  glVertex2f(-1 + (2 * x) / gridSizeC + 0.001 * l,
-                             1 - (2 * y) / gridSizeR);
-                  glVertex2f(-1 + (2 * x) / gridSizeC + 0.001 * l,
-                             1 - ((2 * y) / gridSizeR) - 2 / gridSizeR);
-                  glEnd();
-                }
-              }
-            }
-          }
-        }*/
-      }
-    }
+        int pNode = x + y * maze.nColumns;
 
-    /*
-        for (auto u : maze.adjMatrix) {
-          cout << "pizza pazza" << endl;
+        glLineWidth(1);
+
+        for (auto u : maze.adjList[pNode]) {
           if (u.edgeType == WALL) {
-            if (u.adj == u.node + maze.columns) {
-              for (int l = 1; l < lineWidth; l++) {
-                glBegin(GL_LINES);
-                glVertex2f(-1 + (2 * x) / gridSizeR,
-                           1 - (2 * y) / gridSizeC + 0.001 * l);
-                glVertex2f(-1 + (2 * i) / gridSizeR + 2 / gridSizeR,
-                           1 - (2 * j) / gridSizeC + 0.001 * l);
-                glEnd();
-              }
-            } else {
-              for (int l = 1; l < lineWidth; l++) {
-                glBegin(GL_LINES);
-                glVertex2f(-1 + (2 * i) / gridSizeR + 0.001 * l,
-                           1 - (2 * j) / gridSizeC);
-                glVertex2f(-1 + (2 * i) / gridSizeR + 0.001 * l,
-                           1 - ((2 * j) / gridSizeC) - 2 / gridSizeC);
-                glEnd();
-              }
+            if (u.adjPtr->id ==
+                pNode + maze.nColumns) { // adiacente sotto // horizontal walls
+
+              glBegin(GL_LINES);
+
+              glVertex2f((2.0 * (x - 0.5)) / gridSizeC - 1,
+                         (1 - 2.0 * (y + 0.5)) / gridSizeR);
+              glVertex2f((2.0 * (x + 0.5)) / gridSizeC - 1,
+                         (1 - 2.0 * (y + 0.5)) / gridSizeR);
+              glEnd();
+
+            } else if (u.adjPtr->id ==
+                       pNode - maze.nColumns) { // adiacente sopra // horizontal
+                                                // walls
+
+              glBegin(GL_LINES);
+
+              glVertex2f((2.0 * (x - 0.5)) / gridSizeC - 1,
+                         (1 - 2.0 * (y - 0.5)) / gridSizeR);
+              glVertex2f((2.0 * (x + 0.5)) / gridSizeC - 1,
+                         (1 - 2.0 * (y - 0.5)) / gridSizeR);
+              glEnd();
+
+            } else if (u.adjPtr->id == pNode - 1) { // a sx // vertical walls
+
+              glBegin(GL_LINES);
+
+              glVertex2f((2.0 * (x - 0.5)) / gridSizeC - 1,
+                         (1 - 2.0 * (y + 0.5)) / gridSizeR);
+              glVertex2f((2.0 * (x - 0.5)) / gridSizeC - 1,
+                         (1 - 2.0 * (y - 0.5)) / gridSizeR);
+              glEnd();
+            } else if (u.adjPtr->id == pNode + 1) { // a sx // vertical walls
+
+              glBegin(GL_LINES);
+
+              glVertex2f((2.0 * (x + 0.5)) / gridSizeC - 1,
+                         (1 - 2.0 * (y - 0.5)) / gridSizeR);
+              glVertex2f((2.0 * (x + 0.5)) / gridSizeC - 1,
+                         (1 - 2.0 * (y + 0.5)) / gridSizeR);
+              glEnd();
             }
           }
         }
-        */
+      }
+    }
 
     // glScalef(zoomLevel, zoomLevel, 0.9f);
 

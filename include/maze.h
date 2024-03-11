@@ -1,19 +1,13 @@
 #ifndef MAZE_H
 #define MAZE_H // include guards
 
+#include "vertex.h"
 #include <iostream>
 #include <vector>
 
 using namespace std;
 
-enum MazeEdgeType {
-
-  WALL, // zero as in adjacency matrix zero means no connection
-  OPEN
-
-};
-
-/*
+/* connectivity of vertices for a 2D grid as a adjacent matrix
 column index = adj
 1 2 3 4 5 6 7 8 9 .....
 . 1 . . 1 . . . . . . . 1 row index = node
@@ -30,30 +24,32 @@ column index = adj
 . . . . . . . 1 . . 1 .
 */
 
-// Formato COO
-struct EdgeAdjMatrix {
+enum MazeEdgeType {
 
-  int node;
-  int adj;
+  WALL, // zero as in adjacency matrix zero means no connection
+  OPEN
+
+};
+
+struct AdjListElem {
+
+  Vertex *adjPtr;
   MazeEdgeType edgeType;
 
-  EdgeAdjMatrix(int _node, int _adj) {
-    node = _node;
-    adj = _adj;
-    edgeType = WALL; // in the beginning no node is connected
-  }
-
+  AdjListElem(Vertex *_adjAdd);
   void print();
 };
 
 struct Maze {
 
-  int rows;
-  int columns;
-  vector<EdgeAdjMatrix> adjMatrix;
-  // manca vett di puntatori a nodi
+  int nRows;
+  int nColumns;
+  vector<Vertex> vertices;
+  vector<vector<AdjListElem>> adjList;
 
-  void initGrid(int, int, int, int);
+  Maze(int _nColumns, int _nRows);
+  void initGrid(int start, int finish);
+  int FindNode(int);
   void print();
 };
 

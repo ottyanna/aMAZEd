@@ -1,39 +1,96 @@
 #include "maze.h"
 
-void Maze::initGrid(int start, int finish, int sizeR,
-                    int sizeC) { // nodefault per sizeC?? //start e finish come
-                                 // li uso nel ptr???
-  rows = sizeR;
-  columns = sizeC;
+AdjListElem::AdjListElem(Vertex *_adjAdd) {
+  adjPtr = _adjAdd;
+  edgeType = WALL; // in the beginning no node is connected
+}
 
-  // reserve space for the exact amount of symmetric edge
-  adjMatrix.reserve(sizeR * (sizeC - 1) + sizeC * (sizeR - 1));
+void AdjListElem::print() {
 
-  // for the symmetric property is like going only to the right and down
-  for (int u = 0; u < sizeC * sizeR; u++) {
-    if ((u + 1) % sizeC != 0) { // cond non sono sul lato dx
-      adjMatrix.push_back(
-          EdgeAdjMatrix(u, u + 1)); // adiacenti destra e sinistra
-    }
-    if (u + sizeC < sizeC * sizeR)
-      adjMatrix.push_back(EdgeAdjMatrix(u, u + sizeC)); // adiacenti giù e su
+  cout << endl;
+  cout << "i=" << adjPtr->id << " ";
+  cout << "color=" << adjPtr->color << " ";
+  cout << "type=" << adjPtr->type << " ";
+  cout << "-----" << endl;
+}
+
+Maze::Maze(int _nColumns, int _nRows) {
+
+  nRows = _nRows;
+  nColumns = _nColumns;
+
+  vector<AdjListElem> v;
+  //-1 is not a vertex, sentinel value(is this the right word?)
+  Vertex vertSent(-1);
+  v.push_back(AdjListElem(&vertSent));
+
+  // reserve space for the exact amount of vertices
+  vertices.reserve(nRows * nColumns);
+  adjList.reserve(nRows * nColumns);
+
+  for (int i = 0; i < nColumns * nRows; i++) {
+    vertices.push_back(Vertex(i));
+    adjList.push_back(v); // init the vector of AdjListElems with sentinel value
   }
 }
 
-void EdgeAdjMatrix::print() {
+// creates "adjacency" list of a 2d grid
+void Maze::initGrid(int start,
+                    int finish) { // nodefault per sizeC?? //start e finish come
+                                  // li uso nel ptr???
+  vertices[start].type = START;
+  vertices[finish].type = FINISH;
 
-  cout << endl;
-  cout << this->node << " ";
-  cout << this->adj << " ";
-  cout << this->edgeType;
-  cout << "-----" << endl;
+  // u is the index of the vertex
+  for (int u = 0; u < vertices.size(); u++) {
+
+    // There is a maximum of 4 possible ways to move around
+    adjList[u].reserve(4);
+
+    // delete the initialization -1 vertex
+    adjList[u].pop_back();
+
+    // AdjListElem(vertices[u]) inits the WALL
+
+    if ((u + 1) % nColumns != 0) { // I can move to the right
+      adjList[u].push_back(AdjListElem(&vertices[u + 1])); // adiacenti a destra
+    }
+
+    if (u + nColumns < vertices.size())
+      adjList[u].push_back(
+          AdjListElem(&vertices[u + nColumns])); // adiacenti giù
+
+    if (u % nColumns != 0) { // I can move to the left
+      adjList[u].push_back(AdjListElem(&vertices[u - 1])); // adiacenti a sx
+    }
+
+    if (u - nColumns > 0)
+      adjList[u].push_back(
+          AdjListElem(&vertices[u - nColumns])); // adiacenti su
+  }
 }
 
 void Maze::print() {
 
-  for (auto elem : adjMatrix)
+  cout << "Printing maze of " << nColumns << "x" << nRows << endl;
+
+  cout << "vertices list is: " << endl;
+  for (auto elem : vertices) {
     elem.print();
+    cout << endl;
+  }
+  cout << endl;
+
+  cout << "****";
+  cout << endl << "adjacency list with wall tracking" << endl;
+  int k = 0;
+  for (auto v : adjList) {
+    cout << k << ":" << endl;
+    for (auto elem : v)
+      elem.print();
+    cout << endl;
+    k++;
+  }
 
   cout << endl;
-  cout << adjMatrix.size();
 }

@@ -3,6 +3,8 @@
 
 #include "maze.h"
 #include <GLFW/glfw3.h>
+#include <chrono>
+#include <thread>
 
 int draw(Maze &);
 
