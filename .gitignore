@@ -3,3 +3,4 @@ build
 exe
 compile_commands.json
 .clangd/
+DreamAsSparseMatrix/
