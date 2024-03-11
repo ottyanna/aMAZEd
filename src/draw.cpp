@@ -1,14 +1,23 @@
 #include "draw.h"
 #include <GL/gl.h>
+#include <GLFW/glfw3.h>
 
-GLfloat pointX(int coo, int N) { return (2.0 * coo - N) / (N + 1.0); }
-GLfloat pointY(int coo, int N) { return (-2.0 * coo - N) / (N + 1.0); }
+float zoomLevel = 1.0;
+
+void scrollCallback(GLFWwindow *window, double xOffset, double yOffset) {
+  if (yOffset > 0) {
+    zoomLevel += 0.01;
+  } else {
+    zoomLevel -= 0.01;
+  }
+
+  if (zoomLevel < 0.5)
+    zoomLevel = 0.5;
+}
 
 int draw(Maze &maze) {
 
   int lineWidth = 12;
-  float gridSizeC = maze.nColumns;
-  float gridSizeR = maze.nRows;
 
   GLFWwindow *window;
 
@@ -16,9 +25,10 @@ int draw(Maze &maze) {
   if (!glfwInit())
     return -1;
 
-  GLfloat ratio = maze.nColumns / maze.nRows;
-  GLint wHeight = 500;
-  GLint wWidth = wHeight * ratio;
+  const float ratio = static_cast<float>(maze.nColumns) / maze.nRows;
+
+  int wWidth = 600;
+  int wHeight = static_cast<int>(wWidth / ratio);
 
   /* Create a windowed mode window and its OpenGL context */
   window = glfwCreateWindow(wWidth, wHeight, "Maze Solver ", NULL, NULL);
@@ -29,6 +39,20 @@ int draw(Maze &maze) {
 
   /* Make the window's context current */
   glfwMakeContextCurrent(window);
+
+  // Set scroll callback function
+  glfwSetScrollCallback(window, scrollCallback);
+
+  float xMin = -0.5;
+  float xMax = maze.nColumns + 0.5;
+  float yMin = -0.5;
+  float yMax = maze.nRows + 0.5;
+
+  float scaleX = 2. / (xMax - xMin);
+  float scaleY = 2. / (yMax - yMin);
+
+  float translateX = -1. - xMin * scaleX;
+  float translateY = -1. - yMin * scaleY;
 
   /* Loop until the user closes the window */
   while (!glfwWindowShouldClose(window)) {
@@ -61,37 +85,39 @@ int draw(Maze &maze) {
           glColor3f(0.6, 0.6, 1);
         } else if (cpathIndex > 0) {
           glColor3f(1, 0.6, 0.6);
-        } else {/*
+        } else {
 
           glColor3f(1, 1, 1); //background color
         }
         */
 
+        glColor3f(0.3, 0, 0);
         glBegin(GL_QUADS);
-
-        glColor3f(0, 1, 0);
-
-        glVertex2f(pointX(x + 0.5, gridSizeC), pointY(y + 0.5, gridSizeR));
-        glVertex2f(pointX(x + 0.5, gridSizeC), pointY(y - 0.5, gridSizeR));
-        glVertex2f(pointX(x - 0.5, gridSizeC), pointY(y + 0.5, gridSizeR));
-        glVertex2f(pointX(x - 0.5, gridSizeC), pointY(y - 0.5, gridSizeR));
-
+        glVertex2f(scaleX * (x - 0.5) + translateX,
+                   scaleY * (y + 0.5) + translateY);
+        glVertex2f(scaleX * (x + 0.5) + translateX,
+                   scaleY * (y + 0.5) + translateY);
+        glVertex2f(scaleX * (x + 0.5) + translateX,
+                   scaleY * (y - 0.5) + translateY);
+        glVertex2f(scaleX * (x - 0.5) + translateX,
+                   scaleY * (y - 0.5) + translateY);
         glEnd();
+
+        // set size to 1 for a group of points
+        glPointSize(5);
 
         glBegin(GL_POINTS);
-        glColor3f(1, 0, 0); // background color
-        // set size to 1 for a group of points
-        glPointSize(10);
 
-        glVertex2f(pointX(x, gridSizeC), pointY(y, gridSizeR));
-        // glVertex2f((2.0 * x) / gridSizeC - 1.0, 1.0 - (2.0 * y) / gridSizeR);
+        glColor3f(0.3, 0.3, 0);
+        glVertex2f(scaleX * x + translateX, scaleY * y + translateY);
+
         glEnd();
-
-        glColor3f(0, 0, 1); // line color
 
         int pNode = x + y * maze.nColumns;
 
-        glLineWidth(1);
+        glLineWidth(lineWidth);
+        // walls color
+        glColor3f(0, 0, 0);
 
         for (auto u : maze.adjList[pNode]) {
           if (u.edgeType == WALL) {
@@ -100,41 +126,44 @@ int draw(Maze &maze) {
 
               glBegin(GL_LINES);
 
-              glVertex2f((2.0 * (x - 0.5)) / gridSizeC - 1,
-                         (1 - 2.0 * (y + 0.5)) / gridSizeR);
-              glVertex2f((2.0 * (x + 0.5)) / gridSizeC - 1,
-                         (1 - 2.0 * (y + 0.5)) / gridSizeR);
+              glVertex2f(scaleX * (x - 0.5) + translateX,
+                         scaleY * (y + 0.5) + translateY);
+              glVertex2f(scaleX * (x + 0.5) + translateX,
+                         scaleY * (y + 0.5) + translateY);
               glEnd();
 
             } else if (u.adjPtr->id ==
-                       pNode - maze.nColumns) { // adiacente sopra // horizontal
+                       pNode - maze.nColumns) { // adiacente sopra //horizontal
                                                 // walls
 
               glBegin(GL_LINES);
 
-              glVertex2f((2.0 * (x - 0.5)) / gridSizeC - 1,
-                         (1 - 2.0 * (y - 0.5)) / gridSizeR);
-              glVertex2f((2.0 * (x + 0.5)) / gridSizeC - 1,
-                         (1 - 2.0 * (y - 0.5)) / gridSizeR);
+              glVertex2f(scaleX * (x - 0.5) + translateX,
+                         scaleY * (y - 0.5) + translateY);
+              glVertex2f(scaleX * (x + 0.5) + translateX,
+                         scaleY * (y - 0.5) + translateY);
+
               glEnd();
 
             } else if (u.adjPtr->id == pNode - 1) { // a sx // vertical walls
 
               glBegin(GL_LINES);
 
-              glVertex2f((2.0 * (x - 0.5)) / gridSizeC - 1,
-                         (1 - 2.0 * (y + 0.5)) / gridSizeR);
-              glVertex2f((2.0 * (x - 0.5)) / gridSizeC - 1,
-                         (1 - 2.0 * (y - 0.5)) / gridSizeR);
+              glVertex2f(scaleX * (x - 0.5) + translateX,
+                         scaleY * (y + 0.5) + translateY);
+              glVertex2f(scaleX * (x - 0.5) + translateX,
+                         scaleY * (y - 0.5) + translateY);
+
               glEnd();
             } else if (u.adjPtr->id == pNode + 1) { // a sx // vertical walls
 
               glBegin(GL_LINES);
 
-              glVertex2f((2.0 * (x + 0.5)) / gridSizeC - 1,
-                         (1 - 2.0 * (y - 0.5)) / gridSizeR);
-              glVertex2f((2.0 * (x + 0.5)) / gridSizeC - 1,
-                         (1 - 2.0 * (y + 0.5)) / gridSizeR);
+              glVertex2f(scaleX * (x + 0.5) + translateX,
+                         scaleY * (y - 0.5) + translateY);
+              glVertex2f(scaleX * (x + 0.5) + translateX,
+                         scaleY * (y + 0.5) + translateY);
+
               glEnd();
             }
           }
@@ -142,7 +171,7 @@ int draw(Maze &maze) {
       }
     }
 
-    // glScalef(zoomLevel, zoomLevel, 0.9f);
+    glScalef(zoomLevel, zoomLevel, 0.1);
 
     /* Swap front and back buffers */
     glfwSwapBuffers(window);
