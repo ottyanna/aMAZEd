@@ -2,9 +2,12 @@
 #define VERTEX_H // include guards
 
 #include <iostream>
+#include <limits>
 #include <vector>
 
 using namespace std;
+
+enum { INF = numeric_limits<int>::max() };
 
 enum Color { WHITE, GREY, BLACK };
 enum VertexType {
@@ -20,12 +23,16 @@ struct Vertex {
   VertexType type;
   Vertex *parent;
 
+  // BFS attribute
+  int dist;
+
   Vertex(int _id, Color _color = WHITE, VertexType _type = NONE,
-         Vertex *_parent = nullptr) {
+         Vertex *_parent = nullptr, int _dist = INF) {
     id = _id;
     color = _color;
     type = _type;
     parent = _parent;
+    dist = _dist;
   }
 
   void print() {

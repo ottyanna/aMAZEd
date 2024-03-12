@@ -1,4 +1,5 @@
 #include "mazeSolve.h"
+#include "vertex.h"
 
 bool DFSvisitSolve(Maze &m, Vertex *u) {
 
@@ -33,4 +34,32 @@ void DFSsolve(Maze &m, int start) { // devo farlo partire dallo start
 
   if (DFSvisitSolve(m, &m.vertices[start]))
     return;
+}
+
+void BFSsolve(Maze &m, int start) { // SERVE IL BACKTRACKINGGG
+
+  m.resetMaze();
+
+  cout << "Solving maze with BFS..." << endl << endl;
+
+  m.vertices[start].color = GREY;
+  m.vertices[start].dist = 0;
+
+  queue<int> Q;
+  Q.push(start);
+
+  while (Q.size() != 0) {
+    int u = Q.back();
+    Q.pop(); // cambiare nomi a u e v
+    for (auto v : m.adjList[u]) {
+      if (v.adjPtr->color == WHITE && v.edgeType == OPEN) {
+        this_thread::sleep_for(chrono::milliseconds(1));
+        v.adjPtr->color = GREY;
+        v.adjPtr->dist = m.vertices[u].dist + 1;
+        v.adjPtr->parent = &m.vertices[u];
+        Q.push(v.adjPtr->id);
+      }
+    }
+    m.vertices[u].color = BLACK;
+  }
 }

@@ -3,6 +3,7 @@
 
 #include "maze.h"
 #include <chrono>
+#include <queue>
 #include <thread>
 #include <vector>
 
@@ -10,5 +11,6 @@ using namespace std;
 
 void DFSsolve(Maze &, int);
 bool DFSvisitSolve(Maze &, Vertex *);
+void BFSsolve(Maze &, int);
 
 #endif
