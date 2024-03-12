@@ -11,8 +11,11 @@ using namespace std;
 
 int main() {
 
-  Maze m(10, 15); // width and height
-  m.initGrid(0, 8);
+  int start = 0;
+  int finish = 8;
+
+  Maze m(10, 10); // width and height
+  m.initGrid(start, finish);
   m.print();
 
   srand(time(NULL));
@@ -21,7 +24,7 @@ int main() {
   // yellow is a*
   thread drawMaze(draw, ref(m));
 
-  DFSGen(m);
+  DFSGen(m, start);
 
   drawMaze.join();
 }

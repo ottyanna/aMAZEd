@@ -8,7 +8,7 @@
 
 using namespace std;
 
-void DFSGen(Maze &);
+void DFSGen(Maze &, int);
 void DFSvisit(Maze &, Vertex *);
 
 #endif

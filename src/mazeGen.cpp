@@ -39,7 +39,7 @@ void wallBreak(Maze &m, int indexVert, int indexAdj) {
 
 void DFSvisit(Maze &m, Vertex *u) {
 
-  this_thread::sleep_for(chrono::milliseconds(500));
+  this_thread::sleep_for(chrono::milliseconds(100));
 
   u->color = GREY;
 
@@ -71,12 +71,15 @@ void DFSvisit(Maze &m, Vertex *u) {
   }
 }
 
-void DFSGen(Maze &m) { // devo farlo partire dallo start
+void DFSGen(Maze &m, int start) { // devo farlo partire dallo start
 
   cout << "Generating maze..." << endl << endl;
 
-  for (auto &u : m.vertices) {
-    if (u.color == WHITE)
-      DFSvisit(m, &u);
-  }
+  DFSvisit(m, &m.vertices[start]);
+
+  // utile nel caso della foresta qui partiamo da start e non ci torniamo più
+  // for (auto &u : m.vertices) {
+  //   if (u.color == WHITE)
+  //     DFSvisit(m, &u);
+  // }
 }

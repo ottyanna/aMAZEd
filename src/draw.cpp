@@ -50,10 +50,10 @@ int draw(Maze &maze) {
   float yMax = maze.nRows + 0.5;
 
   float scaleX = 2. / (xMax - xMin);
-  float scaleY = 2. / (yMax - yMin);
+  float scaleY = -2. / (yMax - yMin);
 
   float translateX = -1. - xMin * scaleX;
-  float translateY = -1. - yMin * scaleY;
+  float translateY = +1. - yMin * scaleY;
 
   /* Loop until the user closes the window */
   while (!glfwWindowShouldClose(window)) {
