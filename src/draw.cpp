@@ -1,9 +1,20 @@
 #include "draw.h"
-#include "maze.h"
-#include <GL/gl.h>
-#include <GLFW/glfw3.h>
 
 float zoomLevel = 1.0;
+
+const float indigo[] = {0.294, 0.000, 0.510};
+const float plum[] = {0.867, 0.627, 0.867};
+const float gold[] = {1.000, 0.843, 0.000};
+const float cyan[] = {0.000, 1.000, 1.000};
+const float greenYellow[] = {0.678, 1.000, 0.184};
+const float black[] = {0, 0, 0};
+
+/*map<string, vector<float>> palette = {
+    {"Indigo", {0.294, 0.000, 0.510}},
+    {"Plum", {0.867, 0.627, 0.867}},
+    {"Gold", {1.000, 0.843, 0.000}},
+
+};*/ //is there a way to do this?
 
 void scrollCallback(GLFWwindow *window, double xOffset, double yOffset) {
   if (yOffset > 0) {
@@ -18,7 +29,7 @@ void scrollCallback(GLFWwindow *window, double xOffset, double yOffset) {
 
 int draw(Maze &maze) {
 
-  int lineWidth = 12;
+  int lineWidth = 1;
 
   GLFWwindow *window;
 
@@ -67,18 +78,19 @@ int draw(Maze &maze) {
 
         int pNode = x + y * maze.nColumns;
 
-        // j is y
-        // i is x
-
-        // int position = i + j * size;
-        // int cpathIndex = path[i + size * j];
-
-        if (maze.vertices[pNode].color == GREY)
-          glColor3f(0.5, 0.5, 0.5);
+        if (maze.vertices[pNode].type == START)
+          glColor3fv(greenYellow);
+        else if (maze.vertices[pNode].type == FINISH) {
+          glColor3fv(cyan);
+        } else if (maze.vertices[pNode].color == GREY)
+          glColor3fv(gold);
         else if (maze.vertices[pNode].color == BLACK)
-          glColor3f(1, 0, 0);
+          glColor3fv(indigo);
         else
-          glColor3f(1, 1, 1);
+          glColor3fv(plum);
+
+        // ma cosa sto analizzando in quel momento mi serve?? tipo pos? magari
+        // per a*search?
 
         /*if (cpathIndex > maxPathIndex) {
           maxPathIndex = cpathIndex;
@@ -125,7 +137,7 @@ int draw(Maze &maze) {
         glLineWidth(lineWidth);
 
         // walls color
-        glColor3f(0, 0, 1);
+        glColor3fv(black);
 
         for (auto u : maze.adjList[pNode]) {
           if (u.edgeType == WALL) {
