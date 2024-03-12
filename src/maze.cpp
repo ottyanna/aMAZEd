@@ -71,6 +71,12 @@ void Maze::initGrid(int start,
   }
 }
 
+void Maze::resetMaze() {
+
+  for (auto &u : vertices)
+    u.color = WHITE;
+}
+
 void Maze::print() {
 
   cout << "Printing maze of " << nColumns << "x" << nRows << endl;
