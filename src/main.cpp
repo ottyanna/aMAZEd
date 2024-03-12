@@ -11,12 +11,12 @@ using namespace std;
 
 int main() {
 
-  int start = 0;
+  int start = 15;
   int finish = 8;
 
   Maze m(10, 10); // width and height
   m.initGrid(start, finish);
-  m.print();
+  // m.print();
 
   srand(time(NULL));
 
