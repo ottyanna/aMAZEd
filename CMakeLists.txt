@@ -19,7 +19,8 @@ add_executable(exe
 # Our project will be able to build a library
 add_library(Lib
 	src/maze.cpp
-	src/draw.cpp)
+	src/draw.cpp
+	src/mazeGen.cpp)
 
 # This is needed if we keep .h files in the "include" directory
 target_include_directories(Lib PUBLIC

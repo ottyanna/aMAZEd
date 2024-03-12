@@ -1,4 +1,5 @@
 #include "draw.h"
+#include "maze.h"
 #include <GL/gl.h>
 #include <GLFW/glfw3.h>
 
@@ -64,11 +65,20 @@ int draw(Maze &maze) {
     for (int y = 0; y < maze.nRows; y++) {
       for (int x = 0; x < maze.nColumns; x++) {
 
+        int pNode = x + y * maze.nColumns;
+
         // j is y
         // i is x
 
         // int position = i + j * size;
         // int cpathIndex = path[i + size * j];
+
+        if (maze.vertices[pNode].color == GREY)
+          glColor3f(0.5, 0.5, 0.5);
+        else if (maze.vertices[pNode].color == BLACK)
+          glColor3f(1, 0, 0);
+        else
+          glColor3f(1, 1, 1);
 
         /*if (cpathIndex > maxPathIndex) {
           maxPathIndex = cpathIndex;
@@ -91,7 +101,6 @@ int draw(Maze &maze) {
         }
         */
 
-        glColor3f(0.3, 0, 0);
         glBegin(GL_QUADS);
         glVertex2f(scaleX * (x - 0.5) + translateX,
                    scaleY * (y + 0.5) + translateY);
@@ -104,20 +113,19 @@ int draw(Maze &maze) {
         glEnd();
 
         // set size to 1 for a group of points
-        glPointSize(5);
-
-        glBegin(GL_POINTS);
-
-        glColor3f(0.3, 0.3, 0);
-        glVertex2f(scaleX * x + translateX, scaleY * y + translateY);
-
-        glEnd();
-
-        int pNode = x + y * maze.nColumns;
-
+        // glPointSize(5);
+        //
+        // glBegin(GL_POINTS);
+        //
+        // glColor3f(0.3, 0.3, 0);
+        // glVertex2f(scaleX * x + translateX, scaleY * y + translateY);
+        //
+        // glEnd();
+        //
         glLineWidth(lineWidth);
+
         // walls color
-        glColor3f(0, 0, 0);
+        glColor3f(0, 0, 1);
 
         for (auto u : maze.adjList[pNode]) {
           if (u.edgeType == WALL) {

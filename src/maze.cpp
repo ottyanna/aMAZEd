@@ -8,9 +8,10 @@ AdjListElem::AdjListElem(Vertex *_adjAdd) {
 void AdjListElem::print() {
 
   cout << endl;
-  cout << "i=" << adjPtr->id << " ";
+  cout << "Adj Vert attributes i=" << adjPtr->id << " ";
   cout << "color=" << adjPtr->color << " ";
-  cout << "type=" << adjPtr->type << " ";
+  cout << "type=" << adjPtr->type << " " << endl;
+  cout << "Wall type is (0 wall, 1 open) " << edgeType << endl;
   cout << "-----" << endl;
 }
 
@@ -64,7 +65,7 @@ void Maze::initGrid(int start,
       adjList[u].push_back(AdjListElem(&vertices[u - 1])); // adiacenti a sx
     }
 
-    if (u - nColumns > 0)
+    if (u - nColumns >= 0)
       adjList[u].push_back(
           AdjListElem(&vertices[u - nColumns])); // adiacenti su
   }

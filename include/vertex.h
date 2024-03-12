@@ -18,11 +18,14 @@ struct Vertex {
   int id;
   Color color;
   VertexType type;
+  Vertex *parent;
 
-  Vertex(int _id, Color _color = WHITE, VertexType _type = NONE) {
+  Vertex(int _id, Color _color = WHITE, VertexType _type = NONE,
+         Vertex *_parent = nullptr) {
     id = _id;
     color = _color;
     type = _type;
+    parent = _parent;
   }
 
   void print() {

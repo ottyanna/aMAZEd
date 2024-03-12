@@ -49,7 +49,6 @@ struct Maze {
 
   Maze(int _nColumns, int _nRows);
   void initGrid(int start, int finish);
-  int FindNode(int);
   void print();
 };
 
