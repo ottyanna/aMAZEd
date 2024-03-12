@@ -17,7 +17,7 @@ void wallBreak(Maze &m, int indexVert, int indexAdj) {
 
 void DFSvisit(Maze &m, Vertex *u) {
 
-  this_thread::sleep_for(chrono::milliseconds(100));
+  this_thread::sleep_for(chrono::milliseconds(1));
 
   u->color = GREY;
 
@@ -43,7 +43,7 @@ void DFSvisit(Maze &m, Vertex *u) {
 
 void DFSGen(Maze &m, int start) { // devo farlo partire dallo start
 
-  cout << "Generating maze..." << endl << endl;
+  cout << "Generating maze with DFS..." << endl << endl;
 
   DFSvisit(m, &m.vertices[start]);
 
