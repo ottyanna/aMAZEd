@@ -6,15 +6,16 @@
 #include "draw.h"
 #include "maze.h"
 #include "mazeGen.h"
+#include "mazeSolve.h"
 
 using namespace std;
 
 int main() {
 
-  int start = 15;
-  int finish = 8;
+  int start = 350;
+  int finish = 900;
 
-  Maze m(10, 10); // width and height
+  Maze m(100, 100); // width and height
   m.initGrid(start, finish);
   // m.print();
 
@@ -25,6 +26,7 @@ int main() {
   thread drawMaze(draw, ref(m));
 
   DFSGen(m, start);
+  DFSsolve(m, start);
 
   drawMaze.join();
 }
