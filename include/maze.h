@@ -35,6 +35,7 @@ struct AdjListElem {
 
   Vertex *adjPtr;
   MazeEdgeType edgeType;
+  int weight;
 
   AdjListElem(Vertex *_adjAdd);
   void print();
@@ -51,6 +52,7 @@ struct Maze {
   void initGrid(int start, int finish);
   void resetMaze();
   void print();
+  void setWeight()
 };
 
 #endif

@@ -84,7 +84,7 @@ int draw(Maze &maze) {
           glColor3fv(darkOrange);
         else if (maze.vertices[pNode].type == FINISH)
           glColor3fv(cyan);
-        else if (maze.vertices[pNode].type == PATHDFS)
+        else if (maze.vertices[pNode].type == PATH)
           glColor3fv(deepPink);
         else if (maze.vertices[pNode].color == GREY)
           glColor3fv(gold);

@@ -1,11 +1,14 @@
 #include "mazeSolve.h"
-#include <iostream>
+#include "vertex.h"
+#include <algorithm>
+#include <tuple>
+#include <utility>
 
 void drawPath(Maze &m, int index) {
 
   if (m.vertices[index].parent != nullptr &&
       m.vertices[index].parent->type != START) {
-    m.vertices[index].parent->type = PATHDFS;
+    m.vertices[index].parent->type = PATH;
     drawPath(m, m.vertices[index].parent->id);
   } else
     return;
@@ -46,7 +49,9 @@ void DFSsolve(Maze &m, int start) { // devo farlo partire dallo start
     return;
 }
 
-void BFSsolve(Maze &m, int start) { // SERVE IL BACKTRACKINGGG
+void BFSsolve(Maze &m, int start) { // ma la distanza serve a noi???
+                                    // forse posso fare altri type e dire dist
+                                    // crescente da origine se voglio
 
   m.resetMaze(); // se li voglio assieme i path devo capire come fare.. tipo
                  // altro type a parte ...
@@ -76,5 +81,72 @@ void BFSsolve(Maze &m, int start) { // SERVE IL BACKTRACKINGGG
       }
     }
     m.vertices[u].color = BLACK;
+  }
+}
+
+void DijkstraSolve(Maze &m, int start) { // bisogna inizializzare un peso da
+                                         // qualche parte usare coloriii
+  m.resetMaze();
+
+  m.vertices[start].dist = 0;
+
+  vector<pair<int, bool>> D; // in S bool=true;
+
+  for (auto &u : m.adjList[start])
+    if (u.edgeType == OPEN)
+      u.adjPtr->dist = u.weight;
+
+  for (auto u : m.vertices) {
+    if (u.id != start)
+      D.push_back(
+          make_pair(u.dist, false)); // D[vertexId] is distance from 0 to
+                                     // vertedId same index as m.vertices
+    else
+      D.push_back(make_pair(u.dist, true)); // true is the vertex in S
+  }
+
+  int sSize = 1;
+
+  while (sSize != m.vertices.size()) {
+
+    int min_indx = 0;
+
+    while (!get<bool>(D[min_indx])) {
+      min_indx++;
+    }
+
+    int startInd = min_indx;
+
+    for (int k = startInd; k < D.size(); k++) {
+      if (!get<bool>(D[k]))
+        if (get<int>(D[k]) < get<int>(D[min_indx]))
+          min_indx = k; // w
+    }
+
+    D[min_indx].second = true; // lo aggiungo a S
+    // put parent uguale a quello prima
+    sSize++;
+
+    int SuppDw = D[min_indx].first; ////????????
+
+    for (auto &u : m.adjList[min_indx])
+      if (u.edgeType == OPEN)
+        u.adjPtr->dist = 1 + SuppDw;
+
+    for (int k = 0; k)
+  }
+}
+
+void DijkstraSolve(Maze &m, int start) { // bisogna inizializzare un peso da
+                                         // qualche parte usare coloriii
+  m.resetMaze();
+  m.setWeight();
+
+  m.vertices[start].dist = 0;
+  m.vertices[start].color = BLACK;
+
+  for (auto &u : m.adjList[start]) {
+    if (u.edgeType == OPEN)
+      u.adjPtr->dist = min(u.adjPtr->dist, 1);
   }
 }

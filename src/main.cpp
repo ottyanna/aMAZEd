@@ -26,7 +26,7 @@ int main() {
 
   DFSGen(m, start);
   // m.print();
-  BFSsolve(m, start);
+  DFSsolve(m, start);
 
   drawMaze.join();
 }

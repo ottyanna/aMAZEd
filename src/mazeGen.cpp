@@ -17,7 +17,7 @@ void wallBreak(Maze &m, int indexVert, int indexAdj) {
 
 void DFSvisit(Maze &m, Vertex *u) {
 
-  this_thread::sleep_for(chrono::milliseconds(1));
+  // this_thread::sleep_for(chrono::milliseconds(1));
 
   u->color = GREY;
 

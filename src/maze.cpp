@@ -73,8 +73,11 @@ void Maze::initGrid(int start,
 
 void Maze::resetMaze() {
 
-  for (auto &u : vertices)
+  for (auto &u : vertices) {
     u.color = WHITE;
+    // u.dist = INF;
+    // u.parent = nullptr;
+  }
 }
 
 void Maze::print() {
@@ -100,4 +103,13 @@ void Maze::print() {
   }
 
   cout << endl;
+}
+
+void Maze::setWeight() {
+
+  for (int k = 0; k < vertices.size(); k++) {
+    for (auto &u : adjList[k])
+      if (u.edgeType == OPEN)
+        u.weight = 1;
+  }
 }
