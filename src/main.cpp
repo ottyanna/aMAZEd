@@ -12,8 +12,8 @@ using namespace std;
 
 int main() {
 
-  int start = 350;
-  int finish = 900;
+  int start = 1520;
+  int finish = 10;
 
   Maze m(100, 100); // width and height
   m.initGrid(start, finish);

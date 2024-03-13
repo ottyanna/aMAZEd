@@ -1,5 +1,14 @@
 #include "mazeSolve.h"
-#include "vertex.h"
+
+void drawPath(Maze &m, int index) {
+
+  if (m.vertices[index].parent != nullptr &&
+      m.vertices[index].parent->type != START) {
+    m.vertices[index].parent->type = PATHDFS;
+    drawPath(m, m.vertices[index].parent->id);
+  } else
+    return;
+}
 
 bool DFSvisitSolve(Maze &m, Vertex *u) {
 
@@ -7,23 +16,23 @@ bool DFSvisitSolve(Maze &m, Vertex *u) {
 
   u->color = GREY;
 
-  if (u->type == FINISH)
+  if (u->type == FINISH) {
+    drawPath(m, u->id);
     return true;
+  }
 
   for (auto &v : m.adjList[u->id]) {
     if (v.adjPtr->color == WHITE && v.edgeType == OPEN) {
       v.adjPtr->parent = u;
-      if (DFSvisitSolve(m, v.adjPtr))
+      if (DFSvisitSolve(
+              m, v.adjPtr)) // se ha trovato il finish continua a ritornare true
         return true;
     }
   }
 
-  u->color = BLACK; // blacken u; it is finished
-  if (u->parent != nullptr)
-    if (DFSvisitSolve(m, u->parent))
-      return true;
+  u->color = BLACK;
 
-  return true; // al punto ci dovrebbe arrivare sempre
+  return false;
 }
 
 void DFSsolve(Maze &m, int start) { // devo farlo partire dallo start
@@ -38,7 +47,8 @@ void DFSsolve(Maze &m, int start) { // devo farlo partire dallo start
 
 void BFSsolve(Maze &m, int start) { // SERVE IL BACKTRACKINGGG
 
-  m.resetMaze();
+  m.resetMaze(); // se li voglio assieme i path devo capire come fare.. tipo
+                 // altro type a parte ...
 
   cout << "Solving maze with BFS..." << endl << endl;
 

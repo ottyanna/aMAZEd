@@ -9,6 +9,7 @@
 
 using namespace std;
 
+void drawPath(Maze &, int);
 void DFSsolve(Maze &, int);
 bool DFSvisitSolve(Maze &, Vertex *);
 void BFSsolve(Maze &, int);

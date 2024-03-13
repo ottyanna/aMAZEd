@@ -8,6 +8,8 @@ const float gold[] = {1.000, 0.843, 0.000};
 const float cyan[] = {0.000, 1.000, 1.000};
 const float greenYellow[] = {0.678, 1.000, 0.184};
 const float black[] = {0, 0, 0};
+const float deepPink[] = {1.000, 0.078, 0.576};
+const float darkOrange[] = {1.000, 0.549, 0.000};
 
 /*map<string, vector<float>> palette = {
     {"Indigo", {0.294, 0.000, 0.510}},
@@ -79,10 +81,12 @@ int draw(Maze &maze) {
         int pNode = x + y * maze.nColumns;
 
         if (maze.vertices[pNode].type == START)
-          glColor3fv(greenYellow);
-        else if (maze.vertices[pNode].type == FINISH) {
+          glColor3fv(darkOrange);
+        else if (maze.vertices[pNode].type == FINISH)
           glColor3fv(cyan);
-        } else if (maze.vertices[pNode].color == GREY)
+        else if (maze.vertices[pNode].type == PATHDFS)
+          glColor3fv(deepPink);
+        else if (maze.vertices[pNode].color == GREY)
           glColor3fv(gold);
         else if (maze.vertices[pNode].color == BLACK)
           glColor3fv(indigo);
@@ -91,27 +95,6 @@ int draw(Maze &maze) {
 
         // ma cosa sto analizzando in quel momento mi serve?? tipo pos? magari
         // per a*search?
-
-        /*if (cpathIndex > maxPathIndex) {
-          maxPathIndex = cpathIndex;
-        }
-        if (position == pos) {
-          glColor3f(0, 1, 0);
-        } else if (position == start) {
-          glColor3f(1, 0, 0);
-        } else if (cpathIndex == -1) {
-          glColor3f(1, 1, 0.4);
-        } else if (mazeBlocks[position][3] != 0) {
-          glColor3f(0.7, 1, 0.7);
-        } else if (mazeBlocks[position][2] != 0) {
-          glColor3f(0.6, 0.6, 1);
-        } else if (cpathIndex > 0) {
-          glColor3f(1, 0.6, 0.6);
-        } else {
-
-          glColor3f(1, 1, 1); //background color
-        }
-        */
 
         glBegin(GL_QUADS);
         glVertex2f(scaleX * (x - 0.5) + translateX,
@@ -134,8 +117,9 @@ int draw(Maze &maze) {
         //
         // glEnd();
         //
-        glLineWidth(lineWidth);
 
+        // walls size
+        glLineWidth(lineWidth);
         // walls color
         glColor3fv(black);
 

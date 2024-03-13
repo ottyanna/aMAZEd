@@ -13,7 +13,9 @@ enum Color { WHITE, GREY, BLACK };
 enum VertexType {
   START = 3,
   NONE = 4,
-  FINISH = 5
+  FINISH = 5,
+  PATHDFS = 6,
+  PATHBFS = 7
 }; // to distinguish them from the colors that are 0,1,2
 
 struct Vertex {
