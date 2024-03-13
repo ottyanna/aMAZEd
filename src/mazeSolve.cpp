@@ -1,4 +1,5 @@
 #include "mazeSolve.h"
+#include <iostream>
 
 void drawPath(Maze &m, int index) {
 
@@ -10,7 +11,7 @@ void drawPath(Maze &m, int index) {
     return;
 }
 
-bool DFSvisitSolve(Maze &m, Vertex *u) {
+bool DFSvisitSolve(Maze &m, Vertex *u) { // LIFO=Stack
 
   this_thread::sleep_for(chrono::milliseconds(1));
 
@@ -59,10 +60,14 @@ void BFSsolve(Maze &m, int start) { // SERVE IL BACKTRACKINGGG
   Q.push(start);
 
   while (Q.size() != 0) {
-    int u = Q.back();
-    Q.pop(); // cambiare nomi a u e v
+    int u = Q.front();
+    Q.pop(); // FIFO =FIRST IN FIRST OUT
     for (auto v : m.adjList[u]) {
       if (v.adjPtr->color == WHITE && v.edgeType == OPEN) {
+        if (v.adjPtr->type == FINISH) {
+          drawPath(m, v.adjPtr->id);
+          return;
+        }
         this_thread::sleep_for(chrono::milliseconds(1));
         v.adjPtr->color = GREY;
         v.adjPtr->dist = m.vertices[u].dist + 1;

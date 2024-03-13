@@ -12,12 +12,11 @@ using namespace std;
 
 int main() {
 
-  int start = 1520;
-  int finish = 10;
+  int start = 260;
+  int finish = 150;
 
   Maze m(100, 100); // width and height
   m.initGrid(start, finish);
-  // m.print();
 
   srand(time(NULL));
 
@@ -26,7 +25,8 @@ int main() {
   thread drawMaze(draw, ref(m));
 
   DFSGen(m, start);
-  DFSsolve(m, start);
+  // m.print();
+  BFSsolve(m, start);
 
   drawMaze.join();
 }
