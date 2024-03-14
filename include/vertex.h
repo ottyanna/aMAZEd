@@ -37,9 +37,10 @@ struct Vertex {
   }
 
   void print() {
-    cout << "id=" << id << " ";
-    cout << "color=" << color << " ";
-    cout << "type=" << type << " ";
+    cout << "id= " << id << " ";
+    cout << "color= " << color << " ";
+    cout << "type= " << type << " ";
+    cout << "dist= " << dist;
   }
 };
 

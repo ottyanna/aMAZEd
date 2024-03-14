@@ -1,4 +1,5 @@
 #include "maze.h"
+#include "vertex.h"
 
 AdjListElem::AdjListElem(Vertex *_adjAdd) {
   adjPtr = _adjAdd;
@@ -75,6 +76,8 @@ void Maze::resetMaze() {
 
   for (auto &u : vertices) {
     u.color = WHITE;
+    if (u.type == PATH)
+      u.type = NONE;
     // u.dist = INF;
     // u.parent = nullptr;
   }

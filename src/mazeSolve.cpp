@@ -1,8 +1,5 @@
 #include "mazeSolve.h"
 #include "vertex.h"
-#include <algorithm>
-#include <tuple>
-#include <utility>
 
 void drawPath(Maze &m, int index) {
 
@@ -16,7 +13,7 @@ void drawPath(Maze &m, int index) {
 
 bool DFSvisitSolve(Maze &m, Vertex *u) { // LIFO=Stack
 
-  this_thread::sleep_for(chrono::milliseconds(1));
+  // this_thread::sleep_for(chrono::milliseconds(100));
 
   u->color = GREY;
 
@@ -42,6 +39,8 @@ bool DFSvisitSolve(Maze &m, Vertex *u) { // LIFO=Stack
 void DFSsolve(Maze &m, int start) { // devo farlo partire dallo start
 
   m.resetMaze();
+
+  this_thread::sleep_for(chrono::milliseconds(100));
 
   cout << "Solving maze with DFS..." << endl << endl;
 
@@ -73,7 +72,7 @@ void BFSsolve(Maze &m, int start) { // ma la distanza serve a noi???
           drawPath(m, v.adjPtr->id);
           return;
         }
-        this_thread::sleep_for(chrono::milliseconds(1));
+        // this_thread::sleep_for(chrono::nanoseconds(1000));
         v.adjPtr->color = GREY;
         v.adjPtr->dist = m.vertices[u].dist + 1;
         v.adjPtr->parent = &m.vertices[u];
@@ -84,69 +83,51 @@ void BFSsolve(Maze &m, int start) { // ma la distanza serve a noi???
   }
 }
 
-void DijkstraSolve(Maze &m, int start) { // bisogna inizializzare un peso da
-                                         // qualche parte usare coloriii
-  m.resetMaze();
+// in Vertex.h non funziona
+// comparison function or lambda
+bool CompareVertexPointers(const Vertex *v1, const Vertex *v2) {
 
-  m.vertices[start].dist = 0;
-
-  vector<pair<int, bool>> D; // in S bool=true;
-
-  for (auto &u : m.adjList[start])
-    if (u.edgeType == OPEN)
-      u.adjPtr->dist = u.weight;
-
-  for (auto u : m.vertices) {
-    if (u.id != start)
-      D.push_back(
-          make_pair(u.dist, false)); // D[vertexId] is distance from 0 to
-                                     // vertedId same index as m.vertices
-    else
-      D.push_back(make_pair(u.dist, true)); // true is the vertex in S
-  }
-
-  int sSize = 1;
-
-  while (sSize != m.vertices.size()) {
-
-    int min_indx = 0;
-
-    while (!get<bool>(D[min_indx])) {
-      min_indx++;
-    }
-
-    int startInd = min_indx;
-
-    for (int k = startInd; k < D.size(); k++) {
-      if (!get<bool>(D[k]))
-        if (get<int>(D[k]) < get<int>(D[min_indx]))
-          min_indx = k; // w
-    }
-
-    D[min_indx].second = true; // lo aggiungo a S
-    // put parent uguale a quello prima
-    sSize++;
-
-    int SuppDw = D[min_indx].first; ////????????
-
-    for (auto &u : m.adjList[min_indx])
-      if (u.edgeType == OPEN)
-        u.adjPtr->dist = 1 + SuppDw;
-
-    for (int k = 0; k)
-  }
+  return (v1->dist < v2->dist);
 }
 
-void DijkstraSolve(Maze &m, int start) { // bisogna inizializzare un peso da
-                                         // qualche parte usare coloriii
+void DijkstraSolve(Maze &m, int start) { // IPERSUPERLENTO
+
+  cout << "Solving maze with Dijkstra..." << endl << endl;
+
   m.resetMaze();
   m.setWeight();
 
+  list<Vertex *> minHeap; // it should be a fibonacci heap
   m.vertices[start].dist = 0;
-  m.vertices[start].color = BLACK;
 
-  for (auto &u : m.adjList[start]) {
-    if (u.edgeType == OPEN)
-      u.adjPtr->dist = min(u.adjPtr->dist, 1);
+  for (auto &u : m.vertices) // bisogna sempre passarlo per referenza
+    minHeap.push_back(&u);
+
+  minHeap.sort(CompareVertexPointers);
+
+  while (minHeap.size() != 0) {
+
+    // this_thread::sleep_for(chrono::nanoseconds(1000));
+
+    Vertex *u = minHeap.front();
+    minHeap.pop_front();
+
+    u->color = BLACK;
+
+    for (auto &v : m.adjList[u->id]) {
+      if (v.edgeType == OPEN && v.adjPtr->color != BLACK &&
+          v.adjPtr->dist > v.weight + u->dist) {
+        // this_thread::sleep_for(chrono::milliseconds(1));
+        v.adjPtr->parent = u;
+        v.adjPtr->dist = u->dist + v.weight;
+        v.adjPtr->color = GREY;
+        if (v.adjPtr->type == FINISH) {
+          drawPath(m, v.adjPtr->id);
+          return;
+        }
+      }
+    }
+
+    minHeap.sort(CompareVertexPointers);
   }
 }

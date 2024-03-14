@@ -12,8 +12,8 @@ using namespace std;
 
 int main() {
 
-  int start = 260;
-  int finish = 150;
+  int start = 4999;
+  int finish = 0;
 
   Maze m(100, 100); // width and height
   m.initGrid(start, finish);
@@ -26,6 +26,8 @@ int main() {
 
   DFSGen(m, start);
   // m.print();
+  DijkstraSolve(m, start);
+  this_thread::sleep_for(chrono::milliseconds(1000));
   DFSsolve(m, start);
 
   drawMaze.join();

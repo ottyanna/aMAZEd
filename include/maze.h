@@ -52,7 +52,7 @@ struct Maze {
   void initGrid(int start, int finish);
   void resetMaze();
   void print();
-  void setWeight()
+  void setWeight();
 };
 
 #endif
