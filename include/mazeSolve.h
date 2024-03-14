@@ -19,5 +19,7 @@ bool DFSvisitSolve(Maze &, Vertex *);
 void BFSsolve(Maze &, int);
 bool CompareVertexPointers(const Vertex *, const Vertex *);
 void DijkstraSolve(Maze &, int);
+void heuristicFunction(int, int);
+void AStarSolve(Maze &, int, int);
 
 #endif

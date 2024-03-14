@@ -79,7 +79,7 @@ void Maze::resetMaze() {
     u.color = WHITE;
     if (u.type == PATH)
       u.type = NONE;
-    // u.dist = INF;
+    u.dist = INF;
     // u.parent = nullptr;
   }
 }

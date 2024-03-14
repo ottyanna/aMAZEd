@@ -55,6 +55,8 @@ void BFSsolve(Maze &m, int start) { // ma la distanza serve a noi???
   m.resetMaze(); // se li voglio assieme i path devo capire come fare.. tipo
                  // altro type a parte ...
 
+  this_thread::sleep_for(chrono::milliseconds(100));
+
   cout << "Solving maze with BFS..." << endl << endl;
 
   m.vertices[start].color = GREY;
@@ -72,7 +74,7 @@ void BFSsolve(Maze &m, int start) { // ma la distanza serve a noi???
           drawPath(m, v.adjPtr->id);
           return;
         }
-        // this_thread::sleep_for(chrono::nanoseconds(1000));
+        this_thread::sleep_for(chrono::nanoseconds(1000));
         v.adjPtr->color = GREY;
         v.adjPtr->dist = m.vertices[u].dist + 1;
         v.adjPtr->parent = &m.vertices[u];
@@ -118,6 +120,59 @@ void DijkstraSolve(Maze &m,
     for (auto &v : m.adjList[u->id]) {
       if (v.edgeType == OPEN && v.adjPtr->color != BLACK &&
           v.adjPtr->dist > v.weight + u->dist) {
+        // this_thread::sleep_for(chrono::milliseconds(1));
+        v.adjPtr->parent = u;
+        v.adjPtr->dist = u->dist + v.weight;
+        v.adjPtr->color = GREY;
+        if (v.adjPtr->type == FINISH) { // ATT:Non funziona più
+          drawPath(m, v.adjPtr->id);
+          return;
+        }
+      }
+    }
+
+    minHeap.sort(CompareVertexPointers);
+  }
+}
+
+int heuristicFunction(Maze &m, int vIndex, int finish) {
+
+  int deltaX = abs(vIndex % m.nColumns - finish % m.nColumns);
+  int deltaY = abs(vIndex / m.nColumns - finish / m.nColumns);
+
+  return deltaX + deltaY;
+}
+
+void AStarSolve(Maze &m, int start,
+                int finish) { // IPERSUPERLENTO SERVE IL MINHEAP REALE
+                              // PROBABLY VERY WRONG
+
+  cout << "Solving maze with A*..." << endl << endl;
+
+  m.resetMaze();
+  m.setWeight();
+
+  list<Vertex *> minHeap; // it should be a fibonacci heap
+  m.vertices[start].dist = 0;
+
+  for (auto &u : m.vertices) // bisogna sempre passarlo per referenza
+    minHeap.push_back(&u);
+
+  minHeap.sort(CompareVertexPointers);
+
+  while (minHeap.size() != 0) {
+
+    // this_thread::sleep_for(chrono::nanoseconds(1000));
+
+    Vertex *u = minHeap.front();
+    minHeap.pop_front();
+
+    u->color = BLACK;
+
+    for (auto &v : m.adjList[u->id]) {
+      if (v.edgeType == OPEN && v.adjPtr->color != BLACK &&
+          v.adjPtr->dist >
+              v.weight + u->dist + heuristicFunction(m, u->id, v.adjPtr->id)) {
         // this_thread::sleep_for(chrono::milliseconds(1));
         v.adjPtr->parent = u;
         v.adjPtr->dist = u->dist + v.weight;

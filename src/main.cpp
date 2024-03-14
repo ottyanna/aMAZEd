@@ -25,11 +25,16 @@ int main() {
   thread drawMaze(draw, ref(m));
 
   DFSGen(m, start);
-  m.addRandomLoops(10);
+  m.addRandomLoops(10); // dim/10
   // m.print();
-  DFSsolve(m, start);
+
+  DijkstraSolve(m, start);
+  this_thread::sleep_for(chrono::milliseconds(1000));
+  AStarSolve(m, start, finish);
   this_thread::sleep_for(chrono::milliseconds(1000));
   BFSsolve(m, start);
+  this_thread::sleep_for(chrono::milliseconds(1000));
+  DFSsolve(m, start);
 
   drawMaze.join();
 }
