@@ -24,7 +24,7 @@ int main() {
   // yellow is a*
   thread drawMaze(draw, ref(m));
 
-  DFSGen(m, start);
+  DFSGenNoRecursion(m, start);
   m.addRandomLoops(10); // dim/10
   // m.print();
 
