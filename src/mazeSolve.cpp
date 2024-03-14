@@ -90,7 +90,8 @@ bool CompareVertexPointers(const Vertex *v1, const Vertex *v2) {
   return (v1->dist < v2->dist);
 }
 
-void DijkstraSolve(Maze &m, int start) { // IPERSUPERLENTO
+void DijkstraSolve(Maze &m,
+                   int start) { // IPERSUPERLENTO SERVE IL MINHEAP REALE
 
   cout << "Solving maze with Dijkstra..." << endl << endl;
 

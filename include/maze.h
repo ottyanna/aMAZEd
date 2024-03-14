@@ -53,6 +53,8 @@ struct Maze {
   void resetMaze();
   void print();
   void setWeight();
+  void wallBreak(int, int);
+  void addRandomLoops(int);
 };
 
 #endif

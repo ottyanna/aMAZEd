@@ -1,20 +1,5 @@
 #include "mazeGen.h"
 
-void wallBreak(Maze &m, int indexVert, int indexAdj) {
-
-  m.adjList[indexVert][indexAdj].edgeType = OPEN;
-
-  int newIndex = m.adjList[indexVert][indexAdj].adjPtr->id;
-  for (auto &u : m.adjList[newIndex]) { // cicla nella lista di adiacenza
-    // dell'adiacente e rompi pure quel muro
-    // att al &u!! se no usa il copy constructor
-    if (u.adjPtr->id == indexVert) {
-      u.edgeType = OPEN;
-      break;
-    }
-  }
-}
-
 void DFSvisit(Maze &m, Vertex *u) {
 
   // this_thread::sleep_for(chrono::milliseconds(1));
@@ -32,7 +17,7 @@ void DFSvisit(Maze &m, Vertex *u) {
   if (adjWhiteIndex.size() != 0) {
     int randIndex = adjWhiteIndex[rand() % adjWhiteIndex.size()];
     m.adjList[u->id][randIndex].adjPtr->parent = u;
-    wallBreak(m, u->id, randIndex);
+    m.wallBreak(u->id, randIndex);
     DFSvisit(m, m.adjList[u->id][randIndex].adjPtr);
   } else {
     u->color = BLACK; // blacken u; it is finished

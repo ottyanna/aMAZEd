@@ -1,5 +1,6 @@
 #include "maze.h"
 #include "vertex.h"
+#include <iostream>
 
 AdjListElem::AdjListElem(Vertex *_adjAdd) {
   adjPtr = _adjAdd;
@@ -114,5 +115,30 @@ void Maze::setWeight() {
     for (auto &u : adjList[k])
       if (u.edgeType == OPEN)
         u.weight = 1;
+  }
+}
+
+void Maze::wallBreak(int indexVert, int indexAdj) {
+
+  adjList[indexVert][indexAdj].edgeType = OPEN;
+
+  int newIndex = adjList[indexVert][indexAdj].adjPtr->id;
+  for (auto &u : adjList[newIndex]) { // cicla nella lista di adiacenza
+    // dell'adiacente e rompi pure quel muro
+    // att al &u!! se no usa il copy constructor
+    if (u.adjPtr->id == indexVert) {
+      u.edgeType = OPEN;
+      break;
+    }
+  }
+}
+
+void Maze::addRandomLoops(int maxLoop) {
+
+  for (int k = 0; k < maxLoop; k++) {
+
+    int randIndex = rand() % vertices.size();
+
+    wallBreak(randIndex, 0); // always the first that exist always
   }
 }
