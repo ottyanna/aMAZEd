@@ -1,5 +1,6 @@
 #include "mazeSolve.h"
-#include "vertex.h"
+
+int delay = 0;
 
 void drawPath(Maze &m, int index) {
 
@@ -13,7 +14,7 @@ void drawPath(Maze &m, int index) {
 
 bool DFSvisitSolve(Maze &m, Vertex *u) { // LIFO=Stack
 
-  // this_thread::sleep_for(chrono::milliseconds(100));
+  this_thread::sleep_for(chrono::milliseconds(delay));
 
   u->color = GREY;
 
@@ -40,7 +41,7 @@ void DFSsolve(Maze &m, int start) { // devo farlo partire dallo start
 
   m.resetMaze();
 
-  this_thread::sleep_for(chrono::milliseconds(100));
+  this_thread::sleep_for(chrono::milliseconds(delay));
 
   cout << "Solving maze with DFS..." << endl << endl;
 
@@ -55,7 +56,7 @@ void BFSsolve(Maze &m, int start) { // ma la distanza serve a noi???
   m.resetMaze(); // se li voglio assieme i path devo capire come fare.. tipo
                  // altro type a parte ...
 
-  this_thread::sleep_for(chrono::milliseconds(100));
+  this_thread::sleep_for(chrono::milliseconds(delay));
 
   cout << "Solving maze with BFS..." << endl << endl;
 
@@ -74,7 +75,7 @@ void BFSsolve(Maze &m, int start) { // ma la distanza serve a noi???
           drawPath(m, v.adjPtr->id);
           return;
         }
-        this_thread::sleep_for(chrono::nanoseconds(1000));
+        this_thread::sleep_for(chrono::milliseconds(delay));
         v.adjPtr->color = GREY;
         v.adjPtr->dist = m.vertices[u].dist + 1;
         v.adjPtr->parent = &m.vertices[u];
@@ -85,105 +86,116 @@ void BFSsolve(Maze &m, int start) { // ma la distanza serve a noi???
   }
 }
 
-// in Vertex.h non funziona
-// comparison function or lambda
-bool CompareVertexPointers(const Vertex *v1, const Vertex *v2) {
+// functor to compare Vertex* as a min heap so the funct needs to invert the
+// sign
+struct CompareVertexPointersStruct {
+  bool operator()(const Vertex *v1, const Vertex *v2) const {
 
-  return (v1->dist < v2->dist);
-}
+    return (v1->dist > v2->dist);
+  }
+};
 
-void DijkstraSolve(Maze &m,
-                   int start) { // IPERSUPERLENTO SERVE IL MINHEAP REALE
+void DijkstraSolveBoost(Maze &m, int start) {
 
-  cout << "Solving maze with Dijkstra..." << endl << endl;
+  cout << "Solving maze with Dijkstra min heap..." << endl << endl;
 
   m.resetMaze();
   m.setWeight();
-
-  list<Vertex *> minHeap; // it should be a fibonacci heap
   m.vertices[start].dist = 0;
 
+  using MinHeap = binomial_heap<Vertex *, compare<CompareVertexPointersStruct>>;
+
+  MinHeap Q;
+  vector<MinHeap::handle_type> handles;
+
   for (auto &u : m.vertices) // bisogna sempre passarlo per referenza
-    minHeap.push_back(&u);
+    handles.push_back(Q.push(&u));
 
-  minHeap.sort(CompareVertexPointers);
+  while (!Q.empty()) {
 
-  while (minHeap.size() != 0) {
+    this_thread::sleep_for(chrono::milliseconds(delay));
 
-    // this_thread::sleep_for(chrono::nanoseconds(1000));
-
-    Vertex *u = minHeap.front();
-    minHeap.pop_front();
+    Vertex *u = Q.top();
+    Q.pop();
 
     u->color = BLACK;
 
     for (auto &v : m.adjList[u->id]) {
       if (v.edgeType == OPEN && v.adjPtr->color != BLACK &&
           v.adjPtr->dist > v.weight + u->dist) {
-        // this_thread::sleep_for(chrono::milliseconds(1));
+        this_thread::sleep_for(chrono::milliseconds(delay));
         v.adjPtr->parent = u;
         v.adjPtr->dist = u->dist + v.weight;
         v.adjPtr->color = GREY;
-        if (v.adjPtr->type == FINISH) { // ATT:Non funziona più
-          drawPath(m, v.adjPtr->id);
-          return;
-        }
-      }
-    }
-
-    minHeap.sort(CompareVertexPointers);
-  }
-}
-
-int heuristicFunction(Maze &m, int vIndex, int finish) {
-
-  int deltaX = abs(vIndex % m.nColumns - finish % m.nColumns);
-  int deltaY = abs(vIndex / m.nColumns - finish / m.nColumns);
-
-  return deltaX + deltaY;
-}
-
-void AStarSolve(Maze &m, int start,
-                int finish) { // IPERSUPERLENTO SERVE IL MINHEAP REALE
-                              // PROBABLY VERY WRONG
-
-  cout << "Solving maze with A*..." << endl << endl;
-
-  m.resetMaze();
-  m.setWeight();
-
-  list<Vertex *> minHeap; // it should be a fibonacci heap
-  m.vertices[start].dist = 0;
-
-  for (auto &u : m.vertices) // bisogna sempre passarlo per referenza
-    minHeap.push_back(&u);
-
-  minHeap.sort(CompareVertexPointers);
-
-  while (minHeap.size() != 0) {
-
-    // this_thread::sleep_for(chrono::nanoseconds(1000));
-
-    Vertex *u = minHeap.front();
-    minHeap.pop_front();
-
-    u->color = BLACK;
-
-    for (auto &v : m.adjList[u->id]) {
-      if (v.edgeType == OPEN && v.adjPtr->color != BLACK &&
-          v.adjPtr->dist >
-              v.weight + u->dist + heuristicFunction(m, u->id, v.adjPtr->id)) {
-        // this_thread::sleep_for(chrono::milliseconds(1));
-        v.adjPtr->parent = u;
-        v.adjPtr->dist = u->dist + v.weight;
-        v.adjPtr->color = GREY;
+        Q.update(handles[v.adjPtr->id]);
         if (v.adjPtr->type == FINISH) {
           drawPath(m, v.adjPtr->id);
           return;
         }
       }
     }
+  }
+}
 
-    minHeap.sort(CompareVertexPointers);
+void ManhattanHeuristic(Maze &m, int finish) {
+
+  for (auto &u : m.vertices) {
+    int deltaX = abs(u.id % m.nColumns - finish % m.nColumns);
+    int deltaY = abs(u.id / m.nColumns - finish / m.nColumns);
+    u.heuristicLengthToFinish = deltaX + deltaY;
+  }
+}
+
+void EuclideanHeuristic(Maze &m, int finish) {
+
+  for (auto &u : m.vertices) {
+    int deltaX = pow(u.id % m.nColumns - finish % m.nColumns, 2);
+    int deltaY = pow(u.id / m.nColumns - finish / m.nColumns, 2);
+    u.heuristicLengthToFinish = pow(deltaX + deltaY, 0.5);
+  }
+}
+
+void AStarSolveBoost(Maze &m, int start, int finish) {
+
+  cout << "Solving maze with A* min heap..." << endl << endl;
+
+  m.resetMaze();
+  m.setWeight();
+  m.vertices[start].dist = 0;
+  EuclideanHeuristic(m, finish);
+
+  using MinHeap = binomial_heap<Vertex *, compare<CompareVertexPointersStruct>>;
+
+  MinHeap Q;
+  vector<MinHeap::handle_type> handles;
+
+  for (auto &u : m.vertices) // bisogna sempre passarlo per referenza
+    handles.push_back(Q.push(&u));
+
+  while (!Q.empty()) {
+
+    this_thread::sleep_for(chrono::milliseconds(delay));
+
+    Vertex *u = Q.top();
+    Q.pop();
+
+    u->color = BLACK;
+
+    for (auto &v : m.adjList[u->id]) {
+      if (v.edgeType == OPEN && v.adjPtr->color != BLACK &&
+          v.adjPtr->dist >
+              v.weight + u->dist + v.adjPtr->heuristicLengthToFinish) {
+        this_thread::sleep_for(chrono::milliseconds(delay));
+        v.adjPtr->parent = u;
+        v.adjPtr->dist =
+            u->dist + v.weight + v.adjPtr->heuristicLengthToFinish; ///???
+        v.adjPtr->color = GREY;
+        Q.update(handles[v.adjPtr->id]);
+        if (v.adjPtr->type == FINISH) {
+          drawPath(m, v.adjPtr->id);
+          return;
+        }
+      }
+    }
   }
 }

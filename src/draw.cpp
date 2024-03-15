@@ -31,7 +31,7 @@ void scrollCallback(GLFWwindow *window, double xOffset, double yOffset) {
 
 int draw(Maze &maze) {
 
-  int lineWidth = 1;
+  int lineWidth = 0;
 
   GLFWwindow *window;
 

@@ -4,7 +4,10 @@
 #include "maze.h"
 #include "vertex.h"
 #include <algorithm>
+#include <boost/heap/binomial_heap.hpp>
 #include <chrono>
+#include <cmath>
+#include <iostream>
 #include <list>
 #include <queue>
 #include <thread>
@@ -12,6 +15,7 @@
 #include <vector>
 
 using namespace std;
+using namespace boost::heap;
 
 void drawPath(Maze &, int);
 void DFSsolve(Maze &, int);
@@ -19,7 +23,9 @@ bool DFSvisitSolve(Maze &, Vertex *);
 void BFSsolve(Maze &, int);
 bool CompareVertexPointers(const Vertex *, const Vertex *);
 void DijkstraSolve(Maze &, int);
+void DijkstraSolveBoost(Maze &, int);
 void heuristicFunction(int, int);
 void AStarSolve(Maze &, int, int);
+void AStarSolveBoost(Maze &, int, int);
 
 #endif

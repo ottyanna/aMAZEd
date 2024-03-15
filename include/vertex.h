@@ -23,17 +23,20 @@ struct Vertex {
   Color color;
   VertexType type;
   Vertex *parent;
+  int heuristicLengthToFinish;
 
   // BFS attribute
   int dist;
 
   Vertex(int _id, Color _color = WHITE, VertexType _type = NONE,
-         Vertex *_parent = nullptr, int _dist = INF) {
+         Vertex *_parent = nullptr, int _dist = INF,
+         int _heuristicLengthToFinish = 0) {
     id = _id;
     color = _color;
     type = _type;
     parent = _parent;
     dist = _dist;
+    heuristicLengthToFinish = _heuristicLengthToFinish;
   }
 
   void print() {

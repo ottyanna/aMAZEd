@@ -1,5 +1,4 @@
 #include "mazeGen.h"
-#include <stack>
 
 void DFSGenNoRecursion(
     Maze &m,
@@ -14,7 +13,7 @@ void DFSGenNoRecursion(
 
   while (S.size() != 0) {
 
-    this_thread::sleep_for(chrono::milliseconds(1));
+    // his_thread::sleep_for(chrono::milliseconds(1));
 
     Vertex *u = S.top();
     u->color = GREY;

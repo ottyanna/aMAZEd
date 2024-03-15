@@ -11,6 +11,12 @@ find_package(glfw3 3.4 REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package( Threads )
 
+# boost setup
+set(Boost_USE_STATIC_LIBS OFF) 
+set(Boost_USE_MULTITHREADED ON)  
+set(Boost_USE_STATIC_RUNTIME OFF) 
+find_package(Boost REQUIRED) 
+
 # Our "project" will be able to build an executable out of a C++ source file
 add_executable(exe
    	 src/main.cpp
@@ -28,6 +34,13 @@ target_include_directories(Lib PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
 )
+
+
+if(Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIRS}) 
+    # add_executable(exe file1.cxx file2.cxx) 
+    target_link_libraries(Lib PUBLIC Boost::boost)
+endif()
 
 target_link_libraries(
 	Lib PUBLIC
