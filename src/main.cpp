@@ -49,7 +49,7 @@ public:
 int main() {
 
   int start = 9999;
-  int finish = 20;
+  int finish = 4950;
 
   Maze m(100, 100); // width and height
   m.initGrid(start, finish);
@@ -65,19 +65,19 @@ int main() {
   // m.print();
   cout << "maze generated in " << t.elapsed() << endl << endl;
   t.reset();
-  AStarSolveBoost(m, start, finish);
+  DFSsolve(m, start);
   cout << "maze solved in " << t.elapsed() << endl << endl;
-  this_thread::sleep_for(chrono::milliseconds(10000));
+  this_thread::sleep_for(chrono::milliseconds(1000));
   t.reset();
-  DijkstraSolveBoost(m, start);
+  DijkstraSolve(m, start);
   cout << "maze solved in " << t.elapsed() << endl << endl;
-  this_thread::sleep_for(chrono::milliseconds(10000));
+  this_thread::sleep_for(chrono::milliseconds(1000));
   t.reset();
   BFSsolve(m, start);
   cout << "maze solved in " << t.elapsed() << endl << endl;
-  this_thread::sleep_for(chrono::milliseconds(10000));
+  this_thread::sleep_for(chrono::milliseconds(1000));
   t.reset();
-  DFSsolve(m, start);
+  AStarSolve(m, start, finish);
   cout << "maze solved in " << t.elapsed() << endl << endl;
 
   drawMaze.join();

@@ -95,7 +95,7 @@ struct CompareVertexPointersStruct {
   }
 };
 
-void DijkstraSolveBoost(Maze &m, int start) {
+void DijkstraSolve(Maze &m, int start) {
 
   cout << "Solving maze with Dijkstra min heap..." << endl << endl;
 
@@ -155,7 +155,7 @@ void EuclideanHeuristic(Maze &m, int finish) {
   }
 }
 
-void AStarSolveBoost(Maze &m, int start, int finish) {
+void AStarSolve(Maze &m, int start, int finish) {
 
   cout << "Solving maze with A* min heap..." << endl << endl;
 
