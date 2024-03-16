@@ -95,7 +95,7 @@ struct CompareVertexPointersStruct {
   }
 };
 
-void DijkstraSolveBoost(Maze &m, int start) {
+void DijkstraSolve(Maze &m, int start) {
 
   cout << "Solving maze with Dijkstra min heap..." << endl << endl;
 
@@ -155,14 +155,15 @@ void EuclideanHeuristic(Maze &m, int finish) {
   }
 }
 
-void AStarSolveBoost(Maze &m, int start, int finish) {
+void AStarSolve(Maze &m, int start,
+                int finish) { // Forse sbagliato viene diverso da dijkstra
 
   cout << "Solving maze with A* min heap..." << endl << endl;
 
   m.resetMaze();
   m.setWeight();
   m.vertices[start].dist = 0;
-  EuclideanHeuristic(m, finish);
+  ManhattanHeuristic(m, finish);
 
   using MinHeap = binomial_heap<Vertex *, compare<CompareVertexPointersStruct>>;
 
