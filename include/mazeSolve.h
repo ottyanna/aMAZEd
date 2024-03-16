@@ -21,11 +21,9 @@ void drawPath(Maze &, int);
 void DFSsolve(Maze &, int);
 bool DFSvisitSolve(Maze &, Vertex *);
 void BFSsolve(Maze &, int);
-bool CompareVertexPointers(const Vertex *, const Vertex *);
 void DijkstraSolve(Maze &, int);
-void DijkstraSolveBoost(Maze &, int);
-void heuristicFunction(int, int);
+void ManhattanHeuristic(Maze &, int);
+void EuclideanHeuristic(Maze &, int);
 void AStarSolve(Maze &, int, int);
-void AStarSolveBoost(Maze &, int, int);
 
 #endif

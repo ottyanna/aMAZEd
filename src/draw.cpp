@@ -29,15 +29,15 @@ void scrollCallback(GLFWwindow *window, double xOffset, double yOffset) {
     zoomLevel = 0.5;
 }
 
-int draw(Maze &maze) {
+int draw(Maze &maze, GLFWwindow *window) {
 
   int lineWidth = 0;
 
-  GLFWwindow *window;
+  // GLFWwindow *window = windowNew;
 
   /* Initialize the library */
-  if (!glfwInit())
-    return -1;
+  // if (!glfwInit())
+  //  return -1;
 
   const float ratio = static_cast<float>(maze.nColumns) / maze.nRows;
 
@@ -45,11 +45,11 @@ int draw(Maze &maze) {
   int wHeight = static_cast<int>(wWidth / ratio);
 
   /* Create a windowed mode window and its OpenGL context */
-  window = glfwCreateWindow(wWidth, wHeight, "Maze Solver ", NULL, NULL);
-  if (!window) {
-    glfwTerminate();
-    return -1;
-  }
+  // window = glfwCreateWindow(wWidth, wHeight, "Maze Solver ", NULL, NULL);
+  // if (!window) {
+  //  glfwTerminate();
+  //  return -1;
+  //}
 
   /* Make the window's context current */
   glfwMakeContextCurrent(window);
