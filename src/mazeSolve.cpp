@@ -71,6 +71,7 @@ void BFSsolve(Maze &m, int start) { // ma la distanza serve a noi???
     Q.pop(); // FIFO =FIRST IN FIRST OUT
     for (auto v : m.adjList[u]) {
       if (v.adjPtr->color == WHITE && v.edgeType == OPEN) {
+        v.adjPtr->parent = &m.vertices[u];
         if (v.adjPtr->type == FINISH) {
           drawPath(m, v.adjPtr->id);
           return;
@@ -78,22 +79,12 @@ void BFSsolve(Maze &m, int start) { // ma la distanza serve a noi???
         this_thread::sleep_for(chrono::milliseconds(delay));
         v.adjPtr->color = GREY;
         v.adjPtr->dist = m.vertices[u].dist + 1;
-        v.adjPtr->parent = &m.vertices[u];
         Q.push(v.adjPtr->id);
       }
     }
     m.vertices[u].color = BLACK;
   }
 }
-
-// functor to compare Vertex* as a min heap so the funct needs to invert the
-// sign
-struct CompareVertexPointersStruct {
-  bool operator()(const Vertex *v1, const Vertex *v2) const {
-
-    return (v1->dist > v2->dist);
-  }
-};
 
 void DijkstraSolve(Maze &m, int start) {
 
@@ -103,13 +94,12 @@ void DijkstraSolve(Maze &m, int start) {
   m.setWeight();
   m.vertices[start].dist = 0;
 
-  using MinHeap = binomial_heap<Vertex *, compare<CompareVertexPointersStruct>>;
-
   MinHeap Q;
-  vector<MinHeap::handle_type> handles;
 
   for (auto &u : m.vertices) // bisogna sempre passarlo per referenza
-    handles.push_back(Q.push(&u));
+  {
+    u.handle = Q.push(&u);
+  }
 
   while (!Q.empty()) {
 
@@ -127,7 +117,7 @@ void DijkstraSolve(Maze &m, int start) {
         v.adjPtr->parent = u;
         v.adjPtr->dist = u->dist + v.weight;
         v.adjPtr->color = GREY;
-        Q.update(handles[v.adjPtr->id]);
+        Q.update(v.adjPtr->handle);
         if (v.adjPtr->type == FINISH) {
           drawPath(m, v.adjPtr->id);
           return;
@@ -155,47 +145,58 @@ void EuclideanHeuristic(Maze &m, int finish) {
   }
 }
 
+// g è g
+// f=dist
 void AStarSolve(Maze &m, int start, int finish) {
 
   cout << "Solving maze with A* min heap..." << endl << endl;
 
   m.resetMaze();
   m.setWeight();
+  m.vertices[start].g = 0;
+  ManhattanHeuristic(m, finish);
   m.vertices[start].dist = 0;
-  EuclideanHeuristic(m, finish);
+  // m.vertices[start].heuristicLengthToFinish; //+ g(start)
 
-  using MinHeap = binomial_heap<Vertex *, compare<CompareVertexPointersStruct>>;
+  MinHeap openHeap;
 
-  MinHeap Q;
-  vector<MinHeap::handle_type> handles;
+  m.vertices[start].color = GREY; // add the node to OPEN list
+  m.vertices[start].handle = openHeap.push(&m.vertices[start]);
 
-  for (auto &u : m.vertices) // bisogna sempre passarlo per referenza
-    handles.push_back(Q.push(&u));
+  while (!openHeap.empty()) {
 
-  while (!Q.empty()) {
+    Vertex *u = openHeap.top();
+
+    if (u->type == FINISH) {
+      drawPath(m, u->id);
+      return;
+    }
+
+    openHeap.pop();
+
+    // u->print();
 
     this_thread::sleep_for(chrono::milliseconds(delay));
 
-    Vertex *u = Q.top();
-    Q.pop();
-
-    u->color = BLACK;
-
     for (auto &v : m.adjList[u->id]) {
-      if (v.edgeType == OPEN && v.adjPtr->color != BLACK &&
-          v.adjPtr->dist >
-              v.weight + u->dist + v.adjPtr->heuristicLengthToFinish) {
-        this_thread::sleep_for(chrono::milliseconds(delay));
-        v.adjPtr->parent = u;
-        v.adjPtr->dist =
-            u->dist + v.weight + v.adjPtr->heuristicLengthToFinish; ///???
-        v.adjPtr->color = GREY;
-        Q.update(handles[v.adjPtr->id]);
-        if (v.adjPtr->type == FINISH) {
-          drawPath(m, v.adjPtr->id);
-          return;
+      if (v.edgeType == OPEN) {
+
+        int cost = u->g + v.weight;
+
+        if (v.adjPtr->color == WHITE || cost < v.adjPtr->g) {
+          v.adjPtr->g = cost;
+          v.adjPtr->dist = v.adjPtr->g + v.adjPtr->heuristicLengthToFinish;
+          v.adjPtr->parent = u;
+          if (v.adjPtr->color !=
+              GREY) { // not in the open list quindi o bianco o closed
+            v.adjPtr->color = GREY;
+            v.adjPtr->handle = openHeap.push(v.adjPtr);
+          } else
+            openHeap.update(v.adjPtr->handle); // it is già in the open list
         }
       }
     }
+
+    u->color = BLACK; // add the node to CLOSED list
   }
 }

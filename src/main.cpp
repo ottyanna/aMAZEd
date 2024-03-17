@@ -49,27 +49,23 @@ public:
 int main() {
 
   int start = 9999;
-  int finish = 4950;
+  int finish = 5050;
+  // start = 5;
+  // finish = 99;
 
   Maze m(100, 100); // width and height
-  m.initGrid(start, finish);
+  m.initGrid(0, finish);
 
   srand(time(NULL));
 
-  // red is right hand
-  // yellow is a*
   thread drawMaze(draw, ref(m));
   Timer t;
   DFSGenNoRecursion(m, 0);
   m.addRandomLoops(1000); // dim/10
-  // m.print();
+                          // m.print();
   cout << "maze generated in " << t.elapsed() << endl << endl;
   t.reset();
   DFSsolve(m, start);
-  cout << "maze solved in " << t.elapsed() << endl << endl;
-  this_thread::sleep_for(chrono::milliseconds(1000));
-  t.reset();
-  DijkstraSolve(m, start);
   cout << "maze solved in " << t.elapsed() << endl << endl;
   this_thread::sleep_for(chrono::milliseconds(1000));
   t.reset();
@@ -79,6 +75,12 @@ int main() {
   t.reset();
   AStarSolve(m, start, finish);
   cout << "maze solved in " << t.elapsed() << endl << endl;
+  this_thread::sleep_for(chrono::milliseconds(1000));
+  t.reset();
+  DijkstraSolve(m, start);
+  cout << "maze solved in " << t.elapsed() << endl << endl;
+
+  cout << "Finished solving ";
 
   drawMaze.join();
 }

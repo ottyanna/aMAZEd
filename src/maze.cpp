@@ -80,7 +80,7 @@ void Maze::resetMaze() {
     if (u.type == PATH)
       u.type = NONE;
     u.dist = INF;
-    // u.parent = nullptr;
+    u.parent = nullptr; //?
   }
 }
 
