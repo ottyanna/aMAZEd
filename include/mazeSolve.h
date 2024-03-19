@@ -22,8 +22,7 @@ void DFSsolve(Maze &, int);
 bool DFSvisitSolve(Maze &, Vertex *);
 void BFSsolve(Maze &, int);
 void DijkstraSolve(Maze &, int);
-void ManhattanHeuristic(Maze &, int);
-void EuclideanHeuristic(Maze &, int);
+int ManhattanHeuristic(Maze &, Vertex, int);
 void AStarSolve(Maze &, int, int);
 
 #endif

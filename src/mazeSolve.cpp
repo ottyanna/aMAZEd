@@ -127,22 +127,11 @@ void DijkstraSolve(Maze &m, int start) {
   }
 }
 
-void ManhattanHeuristic(Maze &m, int finish) {
+int ManhattanHeuristic(Maze &m, Vertex u, int finish) {
 
-  for (auto &u : m.vertices) {
-    int deltaX = abs(u.id % m.nColumns - finish % m.nColumns);
-    int deltaY = abs(u.id / m.nColumns - finish / m.nColumns);
-    u.heuristicLengthToFinish = deltaX + deltaY;
-  }
-}
-
-void EuclideanHeuristic(Maze &m, int finish) {
-
-  for (auto &u : m.vertices) {
-    int deltaX = pow(u.id % m.nColumns - finish % m.nColumns, 2);
-    int deltaY = pow(u.id / m.nColumns - finish / m.nColumns, 2);
-    u.heuristicLengthToFinish = pow(deltaX + deltaY, 0.5);
-  }
+  int deltaX = abs(u.id % m.nColumns - finish % m.nColumns);
+  int deltaY = abs(u.id / m.nColumns - finish / m.nColumns);
+  return deltaX + deltaY;
 }
 
 // g è g
@@ -154,9 +143,10 @@ void AStarSolve(Maze &m, int start, int finish) {
   m.resetMaze();
   m.setWeight();
   m.vertices[start].g = 0;
-  ManhattanHeuristic(m, finish);
   m.vertices[start].dist = 0;
   // m.vertices[start].heuristicLengthToFinish; //+ g(start)
+  int TieCounter = 0; // si può provare a non trovare il shortest e mettere una
+                      // tie breaking rule
 
   MinHeap openHeap;
 
@@ -167,12 +157,18 @@ void AStarSolve(Maze &m, int start, int finish) {
 
     Vertex *u = openHeap.top();
 
-    if (u->type == FINISH) {
+    if (u->type ==
+        FINISH) { // prima di associare u do dopo? se top è O(1) meglio prima
       drawPath(m, u->id);
+      cout << "There were " << TieCounter << " ties!" << endl;
       return;
     }
 
     openHeap.pop();
+
+    if (!openHeap.empty())
+      if (openHeap.top()->dist == u->dist)
+        TieCounter++;
 
     // u->print();
 
@@ -185,7 +181,8 @@ void AStarSolve(Maze &m, int start, int finish) {
 
         if (v.adjPtr->color == WHITE || cost < v.adjPtr->g) {
           v.adjPtr->g = cost;
-          v.adjPtr->dist = v.adjPtr->g + v.adjPtr->heuristicLengthToFinish;
+          v.adjPtr->dist =
+              v.adjPtr->g + ManhattanHeuristic(m, *v.adjPtr, finish);
           v.adjPtr->parent = u;
           if (v.adjPtr->color !=
               GREY) { // not in the open list quindi o bianco o closed

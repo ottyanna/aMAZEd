@@ -45,7 +45,6 @@ struct Vertex {
   Color color;
   VertexType type;
   Vertex *parent;
-  int heuristicLengthToFinish;
 
   // BFS attribute
   int dist; // for AStar is f
@@ -62,14 +61,12 @@ struct Vertex {
   //} // namespace std
 
   Vertex(int _id, Color _color = WHITE, VertexType _type = NONE,
-         Vertex *_parent = nullptr, int _dist = INF,
-         int _heuristicLengthToFinish = 0, int _g = INF) {
+         Vertex *_parent = nullptr, int _dist = INF, int _g = INF) {
     id = _id;
     color = _color;
     type = _type;
     parent = _parent;
     dist = _dist;
-    heuristicLengthToFinish = _heuristicLengthToFinish;
     g = _g;
   }
 

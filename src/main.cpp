@@ -49,7 +49,7 @@ public:
 int main() {
 
   int start = 9999;
-  int finish = 5050;
+  int finish = 250;
   // start = 5;
   // finish = 99;
 
@@ -64,15 +64,15 @@ int main() {
   m.addRandomLoops(1000); // dim/10
                           // m.print();
   cout << "maze generated in " << t.elapsed() << endl << endl;
-  t.reset();
-  DFSsolve(m, start);
-  cout << "maze solved in " << t.elapsed() << endl << endl;
-  this_thread::sleep_for(chrono::milliseconds(1000));
-  t.reset();
-  BFSsolve(m, start);
-  cout << "maze solved in " << t.elapsed() << endl << endl;
-  this_thread::sleep_for(chrono::milliseconds(1000));
-  t.reset();
+  // t.reset();
+  // DFSsolve(m, start);
+  // cout << "maze solved in " << t.elapsed() << endl << endl;
+  // this_thread::sleep_for(chrono::milliseconds(1000));
+  // t.reset();
+  // BFSsolve(m, start);
+  // cout << "maze solved in " << t.elapsed() << endl << endl;
+  // this_thread::sleep_for(chrono::milliseconds(1000));
+  // t.reset();
   AStarSolve(m, start, finish);
   cout << "maze solved in " << t.elapsed() << endl << endl;
   this_thread::sleep_for(chrono::milliseconds(1000));
