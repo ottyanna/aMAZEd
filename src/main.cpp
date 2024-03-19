@@ -57,25 +57,31 @@ int main() {
   m.initGrid(0, finish);
 
   srand(time(NULL));
-
   thread drawMaze(draw, ref(m));
+
   Timer t;
   DFSGenNoRecursion(m, 0);
+  cout << "maze generated in " << t.elapsed() << endl << endl;
+
   m.addRandomLoops(1000); // dim/10
                           // m.print();
-  cout << "maze generated in " << t.elapsed() << endl << endl;
-  // t.reset();
-  // DFSsolve(m, start);
-  // cout << "maze solved in " << t.elapsed() << endl << endl;
-  // this_thread::sleep_for(chrono::milliseconds(1000));
-  // t.reset();
-  // BFSsolve(m, start);
-  // cout << "maze solved in " << t.elapsed() << endl << endl;
-  // this_thread::sleep_for(chrono::milliseconds(1000));
-  // t.reset();
+  m.setWeight();
+
+  t.reset();
+  DFSsolve(m, start);
+  cout << "maze solved in " << t.elapsed() << endl << endl;
+  this_thread::sleep_for(chrono::milliseconds(1000));
+
+  t.reset();
+  BFSsolve(m, start);
+  cout << "maze solved in " << t.elapsed() << endl << endl;
+  this_thread::sleep_for(chrono::milliseconds(1000));
+
+  t.reset();
   AStarSolve(m, start, finish);
   cout << "maze solved in " << t.elapsed() << endl << endl;
   this_thread::sleep_for(chrono::milliseconds(1000));
+
   t.reset();
   DijkstraSolve(m, start);
   cout << "maze solved in " << t.elapsed() << endl << endl;

@@ -2,6 +2,7 @@
 
 int delay = 0;
 
+// draws path following parents pointers
 void drawPath(Maze &m, int index) {
 
   if (m.vertices[index].parent != nullptr &&
@@ -12,121 +13,10 @@ void drawPath(Maze &m, int index) {
     return;
 }
 
-bool DFSvisitSolve(Maze &m, Vertex *u) { // LIFO=Stack
+/*A* SEARCH*/
 
-  this_thread::sleep_for(chrono::milliseconds(delay));
-
-  u->color = GREY;
-
-  if (u->type == FINISH) {
-    drawPath(m, u->id);
-    return true;
-  }
-
-  for (auto &v : m.adjList[u->id]) {
-    if (v.adjPtr->color == WHITE && v.edgeType == OPEN) {
-      v.adjPtr->parent = u;
-      if (DFSvisitSolve(
-              m, v.adjPtr)) // se ha trovato il finish continua a ritornare true
-        return true;
-    }
-  }
-
-  u->color = BLACK;
-
-  return false;
-}
-
-void DFSsolve(Maze &m, int start) { // devo farlo partire dallo start
-
-  m.resetMaze();
-
-  this_thread::sleep_for(chrono::milliseconds(delay));
-
-  cout << "Solving maze with DFS..." << endl << endl;
-
-  if (DFSvisitSolve(m, &m.vertices[start]))
-    return;
-}
-
-void BFSsolve(Maze &m, int start) { // ma la distanza serve a noi???
-                                    // forse posso fare altri type e dire dist
-                                    // crescente da origine se voglio
-
-  m.resetMaze(); // se li voglio assieme i path devo capire come fare.. tipo
-                 // altro type a parte ...
-
-  this_thread::sleep_for(chrono::milliseconds(delay));
-
-  cout << "Solving maze with BFS..." << endl << endl;
-
-  m.vertices[start].color = GREY;
-  m.vertices[start].dist = 0;
-
-  queue<int> Q;
-  Q.push(start);
-
-  while (Q.size() != 0) {
-    int u = Q.front();
-    Q.pop(); // FIFO =FIRST IN FIRST OUT
-    for (auto v : m.adjList[u]) {
-      if (v.adjPtr->color == WHITE && v.edgeType == OPEN) {
-        v.adjPtr->parent = &m.vertices[u];
-        if (v.adjPtr->type == FINISH) {
-          drawPath(m, v.adjPtr->id);
-          return;
-        }
-        this_thread::sleep_for(chrono::milliseconds(delay));
-        v.adjPtr->color = GREY;
-        v.adjPtr->dist = m.vertices[u].dist + 1;
-        Q.push(v.adjPtr->id);
-      }
-    }
-    m.vertices[u].color = BLACK;
-  }
-}
-
-void DijkstraSolve(Maze &m, int start) {
-
-  cout << "Solving maze with Dijkstra min heap..." << endl << endl;
-
-  m.resetMaze();
-  m.setWeight();
-  m.vertices[start].dist = 0;
-
-  MinHeap Q;
-
-  for (auto &u : m.vertices) // bisogna sempre passarlo per referenza
-  {
-    u.handle = Q.push(&u);
-  }
-
-  while (!Q.empty()) {
-
-    this_thread::sleep_for(chrono::milliseconds(delay));
-
-    Vertex *u = Q.top();
-    Q.pop();
-
-    u->color = BLACK;
-
-    for (auto &v : m.adjList[u->id]) {
-      if (v.edgeType == OPEN && v.adjPtr->color != BLACK &&
-          v.adjPtr->dist > v.weight + u->dist) {
-        this_thread::sleep_for(chrono::milliseconds(delay));
-        v.adjPtr->parent = u;
-        v.adjPtr->dist = u->dist + v.weight;
-        v.adjPtr->color = GREY;
-        Q.update(v.adjPtr->handle);
-        if (v.adjPtr->type == FINISH) {
-          drawPath(m, v.adjPtr->id);
-          return;
-        }
-      }
-    }
-  }
-}
-
+// Manhattan Heuristic distance, good for grid with 4 possible moves
+// d=|DeltaX|+|DeltaY|
 int ManhattanHeuristic(Maze &m, Vertex u, int finish) {
 
   int deltaX = abs(u.id % m.nColumns - finish % m.nColumns);
@@ -134,16 +24,13 @@ int ManhattanHeuristic(Maze &m, Vertex u, int finish) {
   return deltaX + deltaY;
 }
 
-// g è g
-// f=dist
 void AStarSolve(Maze &m, int start, int finish) {
 
-  cout << "Solving maze with A* min heap..." << endl << endl;
+  cout << "Solving maze with A* with min heap..." << endl << endl;
 
   m.resetMaze();
-  m.setWeight();
   m.vertices[start].g = 0;
-  m.vertices[start].dist = 0;
+  m.vertices[start].f = 0;
   // m.vertices[start].heuristicLengthToFinish; //+ g(start)
   int TieCounter = 0; // si può provare a non trovare il shortest e mettere una
                       // tie breaking rule
@@ -167,7 +54,7 @@ void AStarSolve(Maze &m, int start, int finish) {
     openHeap.pop();
 
     if (!openHeap.empty())
-      if (openHeap.top()->dist == u->dist)
+      if (openHeap.top()->f == u->f)
         TieCounter++;
 
     // u->print();
@@ -181,8 +68,7 @@ void AStarSolve(Maze &m, int start, int finish) {
 
         if (v.adjPtr->color == WHITE || cost < v.adjPtr->g) {
           v.adjPtr->g = cost;
-          v.adjPtr->dist =
-              v.adjPtr->g + ManhattanHeuristic(m, *v.adjPtr, finish);
+          v.adjPtr->f = v.adjPtr->g + ManhattanHeuristic(m, *v.adjPtr, finish);
           v.adjPtr->parent = u;
           if (v.adjPtr->color !=
               GREY) { // not in the open list quindi o bianco o closed
@@ -195,5 +81,124 @@ void AStarSolve(Maze &m, int start, int finish) {
     }
 
     u->color = BLACK; // add the node to CLOSED list
+  }
+}
+
+/*Depth First Search*/
+
+bool DFSvisitSolve(Maze &m, Vertex *u) { // LIFO=Stack
+
+  this_thread::sleep_for(chrono::milliseconds(delay));
+
+  u->color = GREY;
+
+  if (u->type == FINISH) {
+    drawPath(m, u->id);
+    return true;
+  }
+
+  for (auto &v : m.adjList[u->id]) {
+    if (v.adjPtr->color == WHITE && v.edgeType == OPEN) {
+      v.adjPtr->parent = u;
+      if (DFSvisitSolve(m, v.adjPtr)) // TO REMOVE: se ha trovato il finish
+                                      // continua a ritornare true
+        return true;
+    }
+  }
+
+  u->color = BLACK;
+
+  return false;
+}
+
+void DFSsolve(Maze &m, int start) {
+
+  m.resetMaze();
+
+  this_thread::sleep_for(chrono::milliseconds(delay));
+
+  cout << "Solving maze with DFS..." << endl << endl;
+
+  if (DFSvisitSolve(m, &m.vertices[start]))
+    return;
+}
+
+/*Breath First Search*/
+
+void BFSsolve(Maze &m, int start) { // TO REMOVE: ma la distanza serve a noi???
+                                    // forse posso fare altri type e dire dist
+                                    // crescente da origine se voglio
+
+  m.resetMaze();
+
+  this_thread::sleep_for(chrono::milliseconds(delay));
+
+  cout << "Solving maze with BFS..." << endl << endl;
+
+  m.vertices[start].color = GREY;
+  m.vertices[start].f = 0;
+
+  queue<int> Q;
+  Q.push(start);
+
+  while (Q.size() != 0) {
+    int u = Q.front();
+    Q.pop(); // FIFO =FIRST IN FIRST OUT
+    for (auto v : m.adjList[u]) {
+      if (v.adjPtr->color == WHITE && v.edgeType == OPEN) {
+        v.adjPtr->parent = &m.vertices[u];
+        if (v.adjPtr->type == FINISH) {
+          drawPath(m, v.adjPtr->id);
+          return;
+        }
+        this_thread::sleep_for(chrono::milliseconds(delay));
+        v.adjPtr->color = GREY;
+        v.adjPtr->f = m.vertices[u].f + 1;
+        Q.push(v.adjPtr->id);
+      }
+    }
+    m.vertices[u].color = BLACK;
+  }
+}
+
+/*DIJKSTRA*/
+
+void DijkstraSolve(Maze &m, int start) {
+
+  cout << "Solving maze with Dijkstra min heap..." << endl << endl;
+
+  m.resetMaze();
+  m.vertices[start].f = 0;
+
+  MinHeap Q;
+
+  for (auto &u : m.vertices) // TO REMOVE: bisogna sempre passarlo per referenza
+  {
+    u.handle = Q.push(&u);
+  }
+
+  while (!Q.empty()) {
+
+    this_thread::sleep_for(chrono::milliseconds(delay));
+
+    Vertex *u = Q.top();
+    Q.pop();
+
+    u->color = BLACK;
+
+    for (auto &v : m.adjList[u->id]) {
+      if (v.edgeType == OPEN && v.adjPtr->color != BLACK &&
+          v.adjPtr->f > v.weight + u->f) {
+        this_thread::sleep_for(chrono::milliseconds(delay));
+        v.adjPtr->parent = u;
+        v.adjPtr->f = u->f + v.weight;
+        v.adjPtr->color = GREY;
+        Q.update(v.adjPtr->handle);
+        if (v.adjPtr->type == FINISH) {
+          drawPath(m, v.adjPtr->id);
+          return;
+        }
+      }
+    }
   }
 }

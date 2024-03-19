@@ -1,10 +1,12 @@
 #include "mazeGen.h"
 
-void DFSGenNoRecursion(
-    Maze &m,
-    int start) { // lo stack fa le veci del for e chiamata di ricorsione
+int delayGen = 0; // delay in milliseconds
 
-  cout << "Generating maze with DFS with stack data structure..." << endl
+// DFS maze generation from a start vertex using an explicit stack
+void DFSGenNoRecursion(Maze &m, int start) {
+
+  cout << "Generating maze with DFS with explicit stack data structure..."
+       << endl
        << endl;
 
   stack<Vertex *> S;
@@ -13,23 +15,25 @@ void DFSGenNoRecursion(
 
   while (S.size() != 0) {
 
-    // his_thread::sleep_for(chrono::milliseconds(1));
+    this_thread::sleep_for(chrono::milliseconds(delayGen));
 
     Vertex *u = S.top();
     u->color = GREY;
 
-    vector<int> adjWhiteIndex; // vettore di supporto per gli indici di quelli
-                               // white
+    // temporary vector for not visited(=WHITE) adjacent vertex ids
+    vector<int> adjWhiteIndex;
+    adjWhiteIndex.reserve(4);
 
     for (int k = 0; k < m.adjList[u->id].size(); k++) {
       if (m.adjList[u->id][k].adjPtr->color == WHITE)
         adjWhiteIndex.push_back(k);
     }
 
+    // choose a random available adjacent vertex
     if (adjWhiteIndex.size() != 0) {
       int randIndex = adjWhiteIndex[rand() % adjWhiteIndex.size()];
       m.adjList[u->id][randIndex].adjPtr->parent = u;
-      m.wallBreak(u->id, randIndex);
+      m.wallBreak(u->id, randIndex); // create the connection
       S.push(m.adjList[u->id][randIndex].adjPtr);
     } else {
       u->color = BLACK; // blacken u; it is finished
@@ -38,24 +42,27 @@ void DFSGenNoRecursion(
   }
 }
 
+// DFS maze generation from a start vertex using recursion
 void DFSvisit(Maze &m, Vertex *u) {
 
-  // this_thread::sleep_for(chrono::milliseconds(1));
+  this_thread::sleep_for(chrono::milliseconds(delayGen));
 
   u->color = GREY;
 
-  vector<int> adjWhiteIndex; // vettore di supporto per gli indici di quelli
-                             // white
+  // temporary vector for not visited(=WHITE) adjacent vertex ids
+  vector<int> adjWhiteIndex;
+  adjWhiteIndex.reserve(4);
 
   for (int k = 0; k < m.adjList[u->id].size(); k++) {
     if (m.adjList[u->id][k].adjPtr->color == WHITE)
       adjWhiteIndex.push_back(k);
   }
 
+  // choose a random available adjacent vertex
   if (adjWhiteIndex.size() != 0) {
     int randIndex = adjWhiteIndex[rand() % adjWhiteIndex.size()];
     m.adjList[u->id][randIndex].adjPtr->parent = u;
-    m.wallBreak(u->id, randIndex);
+    m.wallBreak(u->id, randIndex); // create the connection
     DFSvisit(m, m.adjList[u->id][randIndex].adjPtr);
   } else {
     u->color = BLACK; // blacken u; it is finished
@@ -64,12 +71,13 @@ void DFSvisit(Maze &m, Vertex *u) {
   }
 }
 
-void DFSGen(Maze &m, int start) { // devo farlo partire dallo start
+void DFSGen(Maze &m, int start) {
 
   cout << "Generating maze with DFS..." << endl << endl;
 
   DFSvisit(m, &m.vertices[start]);
 
+  // TO REMOVE:
   // utile nel caso della foresta qui partiamo da start e non ci torniamo più
   // for (auto &u : m.vertices) {
   //   if (u.color == WHITE)
