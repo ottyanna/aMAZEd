@@ -29,9 +29,16 @@ theme : "cern"
 ---
 
 ### visivamente e ...
+
 rappresentazione "visiva" &rarr; **griglia 2D NxM**
-- N=#colonne, M=#righe
-- 4 possibili movimenti &rarr; &larr; &darr; &uarr;
+
+4 movimenti possibili &rarr; &larr; &darr; &uarr;
+
+<img src="Griglia.png" width="40%">
+
+<!-- - N=#colonne, M=#righe 
+- 4 possibili movimenti &rarr; &larr; &darr; &uarr; -->
+
 
 ---
 
@@ -59,10 +66,17 @@ struttura interna &rarr; **grafo non orientato come lista di adiacenza "potenzia
 ---
 
 ### ... randomizzato
+
 - DFS non randomizzato crea un unico lungo corridoio in base a come è inizializzata la lista 
 - scelgo un vertice adiacente a caso non ancora visitato e lo visito
 - appena arrivo a un punto dove non ci sono più mosse disponibili "chiudo" il vertice e faccio il backtracking
-- A causa della scelta random è necessario usare uno stack esplicito dove salvare i vertici "in progress"/Grey invece di una chiamata ricorsiva
+- A causa della scelta random è meglio usare uno stack esplicito dove salvare i vertici "in progress"/Grey invece di una chiamata ricorsiva
+
+--
+
+### DFS non randomizzato
+
+<img src="Longcorridor.png" width=50%>
 
 ---
 
@@ -91,7 +105,21 @@ WORST CASE:
 
 ---
 
-#Esempio
+# Esempio
+
+<img src="Dfs 1.png" width=50%>
+
+--
+
+# Esempio
+
+<img src="Dfs 2.png" width=50%>
+
+--
+
+# Esempio
+
+<img src="Dfs 3.png" width=50%>
 
 ---
 
@@ -179,7 +207,27 @@ WORST CASE:
 
 ---
 
-# esempio A*
+## Esempio A*
+
+<img src="Astar 1.png" width=70%>
+
+--
+
+## Esempio A*
+
+<img src="Astar 2.png" width=70%>
+
+--
+
+## Esempio A*
+
+<img src="Astar 3.png" width=70%>
+
+--
+
+## Esempio A*
+
+<img src="Astar 4.png" width=70%>
 
 ---
 
