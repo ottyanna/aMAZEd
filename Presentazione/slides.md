@@ -239,21 +239,19 @@ A* è ammissibile se trova il percorso ottimo (quindi di costo minore) da s a t 
 
 ### Definizione della funzione di stima $\tilde{f}$
 
-# Disegntoot
+<!-- - $t\equiv$ vertice target 
 
-$t\equiv$ vertice target 
+- $s\equiv$ vertice iniziale --> 
 
-$s\equiv$ vertice iniziale 
+<img src="Fn.png" width=40%>
 
-$P*\equiv(m,n)$ percorso ottimo (di costo minimo) tra m ed n
+- $P*\equiv(m,n)$ percorso ottimo (di costo minimo) tra m ed n
 
-$g(n)\equiv$ costo di P*(s,n)
+- $g(n)\equiv$ costo di P*(s,n)
 
-$h(n)\equiv$ costo di P*(n,t) 
+- $h(n)\equiv$ costo di P*(n,t) 
 
-$f(n)\equiv$ costo reale di P*(s,t) vincolato attraverso n 
-
-(Nota che $f(s)=h(s)$ costo di P*(s,t) non vincolato )
+- $f(n)\equiv$ costo reale di P*(s,t) vincolato attraverso n ($f(s)=h(s)$ costo di P*(s,t) non vincolato)
 
 &rarr; $f(n)=g(n)+h(n)$
 
