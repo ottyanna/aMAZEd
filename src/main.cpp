@@ -50,11 +50,20 @@ int main() {
 
   int start = 9999;
   int finish = 250;
-  // start = 5;
+  // start = 5000;
   // finish = 99;
+  // finish = 0;
+  // start = 3; //crisi dfs in 100x100
+  // finish = 100;
+  // start = 7000;
+  // start = 3;
+  start = 90;
+  finish = 9000;
 
-  Maze m(100, 100); // width and height
+  // Maze m(100, 100); // width and height
+  Maze m(180, 100);
   m.initGrid(0, finish);
+  m.vertices[start].type = START;
 
   srand(time(NULL));
   thread drawMaze(draw, ref(m));
@@ -63,24 +72,24 @@ int main() {
   DFSGenNoRecursion(m, 0);
   cout << "maze generated in " << t.elapsed() << endl << endl;
 
-  m.addRandomLoops(1000); // dim/10
-                          // m.print();
+  m.addRandomLoops(3000); // dim/10
+  // m.print();
   m.setWeight();
 
   t.reset();
   DFSsolve(m, start);
   cout << "maze solved in " << t.elapsed() << endl << endl;
-  this_thread::sleep_for(chrono::milliseconds(1000));
+  this_thread::sleep_for(chrono::milliseconds(5000));
 
   t.reset();
   BFSsolve(m, start);
   cout << "maze solved in " << t.elapsed() << endl << endl;
-  this_thread::sleep_for(chrono::milliseconds(1000));
+  this_thread::sleep_for(chrono::milliseconds(5000));
 
   t.reset();
   AStarSolve(m, start, finish);
   cout << "maze solved in " << t.elapsed() << endl << endl;
-  this_thread::sleep_for(chrono::milliseconds(1000));
+  this_thread::sleep_for(chrono::milliseconds(5000));
 
   t.reset();
   DijkstraSolve(m, start);

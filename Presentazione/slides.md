@@ -296,3 +296,59 @@ Se $\tilde{h}(n) \leq h(n)$ $\forall n$, allora A* è ammissibile.
 --
 
 # dim
+
+---
+
+# Ottimalità di A* sotto euristica coerente
+
+---
+
+## Euristica coerente (consistent)
+
+Per ogni nodo m ed n vale la disuguaglianza triangolare
+
+$h(m,n)+\tilde{h}(m) \geq \tilde{h}(n)$
+
+p.e. distanza in linea d'aria $d$
+
+$h(m,n) \geq d(m,n)$ &rarr; $h(m,n)+\tilde{h}(m) \geq d(m,n)+\tilde{h}(m) \geq \tilde{h}(n)$
+
+## disegnetto
+
+---
+
+**Si può dimostrare che**
+**Euristica coerente &rarr; A\* espande meno nodi rispetto a un algoritmo ammissibile A**
+
+**&rarr; $N(A\*,G_{s}) \leq N(A,G_{s})$ dove N numero di nodi espansi.**
+
+Vale $=$ sse A espande gli stessi nodi di A*
+
+Per dimostrarlo si nota che sotto euristica coerente se un nodo n è già stato chiuso &rarr; è stato già trovato il P*(s,n) &rarr; $\tilde{g}(n)=g(n)$ &rarr; n non verrà mai riaperto.
+
+---
+
+# A* nei labirinti
+
+---
+
+## Euristica
+
+Come buona euristica è naturale considerare la **Manhattan distance** ($L_1$) in 2D:
+
+$|x_1-x_2|+|y_1-y_2|$
+
+in quanto è la distanza che si avrebbe nel caso in cui non ci fossero muri.
+
+Si dimostra che questa metrica è coerente.
+
+---
+
+# Confronto tra i vari algoritmi
+
+Se si considerano diversi algoritmi, è facile vedere come effettivamente A* nel caso di aggiunta di loops, quindi riomogeneiizando in terreno visiti molti meno nodi a un costo però di Update e add nello heap. La sua efficacia è molto maggiore nel caso di grafi pesati e spazi più grandi senza troppi "ostacoli". Sicuramente visitando Dijkstra tanti nodi quanto BFS, e avendo stessa complessità di A* performa molto peggio.
+
+Complessità effettiva
+Considerando un branching medio b
+nodo depth d
+

@@ -5,11 +5,11 @@ float zoomLevel = 1.0;
 const float indigo[] = {0.294, 0.000, 0.510};
 const float plum[] = {0.867, 0.627, 0.867};
 const float gold[] = {1.000, 0.843, 0.000};
-const float cyan[] = {0.000, 1.000, 1.000};
+const float cyan[] = {0.000, 1.000, 1.000}; // finish
 const float greenYellow[] = {0.678, 1.000, 0.184};
 const float black[] = {0, 0, 0};
 const float deepPink[] = {1.000, 0.078, 0.576};
-const float darkOrange[] = {1.000, 0.549, 0.000};
+const float darkOrange[] = {1.000, 0.549, 0.000}; // start
 
 /*map<string, vector<float>> palette = {
     {"Indigo", {0.294, 0.000, 0.510}},
@@ -41,8 +41,8 @@ int draw(Maze &maze) {
 
   const float ratio = static_cast<float>(maze.nColumns) / maze.nRows;
 
-  int wWidth = 600;
-  int wHeight = static_cast<int>(wWidth / ratio);
+  int wHeight = 700;
+  int wWidth = static_cast<int>(wHeight * ratio);
 
   /* Create a windowed mode window and its OpenGL context */
   window = glfwCreateWindow(wWidth, wHeight, "Maze Solver ", NULL, NULL);
@@ -81,7 +81,7 @@ int draw(Maze &maze) {
         int pNode = x + y * maze.nColumns;
 
         if (maze.vertices[pNode].type == START)
-          glColor3fv(darkOrange);
+          glColor3f(0, 0, 0);
         else if (maze.vertices[pNode].type == FINISH)
           glColor3fv(cyan);
         else if (maze.vertices[pNode].type == PATH)
