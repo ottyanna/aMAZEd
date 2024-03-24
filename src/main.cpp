@@ -46,22 +46,57 @@ public:
   }
 };
 
-int main() {
+int main(int argc, char *argv[]) {
 
-  int start = 9999;
-  int finish = 250;
-  // start = 5000;
+  if (argc == 1) {
+    cout << "\nNo Extra Command Line Argument Passed "
+            "Other Than Program Name"
+         << endl;
+    // return 0;
+  }
+
+  int start;
+  int finish;
+
+  if (argc != 1 && *argv[1] == 'a') { // gen+solve w/delay
+    delayGen = 0;
+    delaySolve = 1;
+
+    Maze m(100, 100); // width and height
+    start = 5050;
+    finish = 0;
+    m.initGrid(start, finish);
+
+    srand(time(NULL));
+    thread drawMaze(draw, ref(m));
+
+    DFSGenNoRecursion(m, 0);
+    m.addRandomLoops(1000);
+    m.setWeight();
+
+    AStarSolve(m, start, finish);
+
+    drawMaze.join();
+
+    return 0;
+  }
+  //
+  // int start = 9999;
+  // int finish = 250;
+  //// start = 5000;
   // finish = 99;
   // finish = 0;
   // start = 3; //crisi dfs in 100x100
   // finish = 100;
   // start = 7000;
   // start = 3;
-  start = 90;
-  finish = 9000;
+  finish = 90;
+  start = 9000 + 90;
+  start = 20100;
+  finish = 200;
 
-  // Maze m(100, 100); // width and height
-  Maze m(180, 100);
+  Maze m(200, 200); // width and height
+  // Maze m(180, 100);
   m.initGrid(0, finish);
   m.vertices[start].type = START;
 
@@ -72,7 +107,8 @@ int main() {
   DFSGenNoRecursion(m, 0);
   cout << "maze generated in " << t.elapsed() << endl << endl;
 
-  m.addRandomLoops(3000); // dim/10
+  // m.addRandomLoops(3000); // dim/10
+  m.addRandomLoops(10000);
   // m.print();
   m.setWeight();
 
