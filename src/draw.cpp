@@ -9,14 +9,8 @@ const float cyan[] = {0.000, 1.000, 1.000}; // finish
 const float greenYellow[] = {0.678, 1.000, 0.184};
 const float black[] = {0, 0, 0};
 const float deepPink[] = {1.000, 0.078, 0.576};
-const float darkOrange[] = {1.000, 0.549, 0.000}; // start
-
-/*map<string, vector<float>> palette = {
-    {"Indigo", {0.294, 0.000, 0.510}},
-    {"Plum", {0.867, 0.627, 0.867}},
-    {"Gold", {1.000, 0.843, 0.000}},
-
-};*/ //is there a way to do this?
+const float darkOrange[] = {1.000, 0.549, 0.000};
+const float limeGreen[] = {0.196, 0.804, 0.196}; // start
 
 void scrollCallback(GLFWwindow *window, double xOffset, double yOffset) {
   if (yOffset > 0) {
@@ -81,7 +75,7 @@ int draw(Maze &maze) {
         int pNode = x + y * maze.nColumns;
 
         if (maze.vertices[pNode].type == START)
-          glColor3f(0, 0, 0);
+          glColor3fv(limeGreen);
         else if (maze.vertices[pNode].type == FINISH)
           glColor3fv(cyan);
         else if (maze.vertices[pNode].type == PATH)
@@ -92,9 +86,6 @@ int draw(Maze &maze) {
           glColor3fv(indigo);
         else
           glColor3fv(plum);
-
-        // ma cosa sto analizzando in quel momento mi serve?? tipo pos? magari
-        // per a*search?
 
         glBegin(GL_QUADS);
         glVertex2f(scaleX * (x - 0.5) + translateX,
