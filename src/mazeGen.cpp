@@ -1,7 +1,5 @@
 #include "mazeGen.h"
 
-int delayGen = 0; // delay in milliseconds
-
 // DFS maze generation from a start vertex using an explicit stack
 void DFSGenNoRecursion(Maze &m, int start) {
 

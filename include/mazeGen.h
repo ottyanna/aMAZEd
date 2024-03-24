@@ -9,6 +9,8 @@
 
 using namespace std;
 
+int delayGen = 0; // delay in milliseconds
+
 void DFSGenNoRecursion(Maze &, int);
 void DFSGen(Maze &, int);
 void DFSvisit(Maze &, Vertex *);

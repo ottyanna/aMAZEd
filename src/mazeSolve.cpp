@@ -1,7 +1,5 @@
 #include "mazeSolve.h"
 
-int delay = 0;
-
 // draws path following parents pointers
 void drawPath(Maze &m, int index) {
 
@@ -26,14 +24,16 @@ int ManhattanHeuristic(Maze &m, Vertex u, int finish) {
 
 void AStarSolve(Maze &m, int start, int finish) {
 
-  cout << "Solving maze with A* with min heap..." << endl << endl;
+  cout << "Solving maze with A*..." << endl << endl;
 
   m.resetMaze();
   m.vertices[start].g = 0;
   m.vertices[start].f = 0;
   // m.vertices[start].heuristicLengthToFinish; //+ g(start)
-  int TieCounter = 0; // si può provare a non trovare il shortest e mettere una
-                      // tie breaking rule
+
+  // si può provare a non trovare il shortest e mettere
+  // una tie breaking rule
+  // int TieCounter = 0;
 
   MinHeap openHeap;
 
@@ -44,22 +44,19 @@ void AStarSolve(Maze &m, int start, int finish) {
 
     Vertex *u = openHeap.top();
 
-    if (u->type ==
-        FINISH) { // prima di associare u do dopo? se top è O(1) meglio prima
+    if (u->type == FINISH) {
       drawPath(m, u->id);
-      cout << "There were " << TieCounter << " ties!" << endl;
+      // cout << "There were " << TieCounter << " ties!" << endl;
       return;
     }
 
     openHeap.pop();
 
-    if (!openHeap.empty())
-      if (openHeap.top()->f == u->f)
-        TieCounter++;
+    // if (!openHeap.empty())
+    // if (openHeap.top()->f == u->f)
+    // TieCounter++;
 
-    // u->print();
-
-    this_thread::sleep_for(chrono::milliseconds(delay));
+    this_thread::sleep_for(chrono::milliseconds(delaySolve));
 
     for (auto &v : m.adjList[u->id]) {
       if (v.edgeType == OPEN) {
@@ -70,12 +67,13 @@ void AStarSolve(Maze &m, int start, int finish) {
           v.adjPtr->g = cost;
           v.adjPtr->f = v.adjPtr->g + ManhattanHeuristic(m, *v.adjPtr, finish);
           v.adjPtr->parent = u;
-          if (v.adjPtr->color !=
-              GREY) { // not in the open list quindi o bianco o closed
+          // not in the OPEN list ->
+          // WHITE OR CLOSED==BLACK (if dist not consistent)
+          if (v.adjPtr->color != GREY) {
             v.adjPtr->color = GREY;
             v.adjPtr->handle = openHeap.push(v.adjPtr);
           } else
-            openHeap.update(v.adjPtr->handle); // it is già in the open list
+            openHeap.update(v.adjPtr->handle); // it is already in the OPEN list
         }
       }
     }
@@ -88,7 +86,7 @@ void AStarSolve(Maze &m, int start, int finish) {
 
 bool DFSvisitSolve(Maze &m, Vertex *u) { // LIFO=Stack
 
-  this_thread::sleep_for(chrono::milliseconds(delay));
+  this_thread::sleep_for(chrono::milliseconds(delaySolve));
 
   u->color = GREY;
 
@@ -115,7 +113,7 @@ void DFSsolve(Maze &m, int start) {
 
   m.resetMaze();
 
-  this_thread::sleep_for(chrono::milliseconds(delay));
+  this_thread::sleep_for(chrono::milliseconds(delaySolve));
 
   cout << "Solving maze with DFS..." << endl << endl;
 
@@ -131,7 +129,7 @@ void BFSsolve(Maze &m, int start) { // TO REMOVE: ma la distanza serve a noi???
 
   m.resetMaze();
 
-  this_thread::sleep_for(chrono::milliseconds(delay));
+  this_thread::sleep_for(chrono::milliseconds(delaySolve));
 
   cout << "Solving maze with BFS..." << endl << endl;
 
@@ -151,7 +149,7 @@ void BFSsolve(Maze &m, int start) { // TO REMOVE: ma la distanza serve a noi???
           drawPath(m, v.adjPtr->id);
           return;
         }
-        this_thread::sleep_for(chrono::milliseconds(delay));
+        this_thread::sleep_for(chrono::milliseconds(delaySolve));
         v.adjPtr->color = GREY;
         v.adjPtr->f = m.vertices[u].f + 1;
         Q.push(v.adjPtr->id);
@@ -179,7 +177,7 @@ void DijkstraSolve(Maze &m, int start) {
 
   while (!Q.empty()) {
 
-    this_thread::sleep_for(chrono::milliseconds(delay));
+    this_thread::sleep_for(chrono::milliseconds(delaySolve));
 
     Vertex *u = Q.top();
     Q.pop();
@@ -189,7 +187,7 @@ void DijkstraSolve(Maze &m, int start) {
     for (auto &v : m.adjList[u->id]) {
       if (v.edgeType == OPEN && v.adjPtr->color != BLACK &&
           v.adjPtr->f > v.weight + u->f) {
-        this_thread::sleep_for(chrono::milliseconds(delay));
+        this_thread::sleep_for(chrono::milliseconds(delaySolve));
         v.adjPtr->parent = u;
         v.adjPtr->f = u->f + v.weight;
         v.adjPtr->color = GREY;

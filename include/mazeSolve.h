@@ -17,6 +17,8 @@
 using namespace std;
 using namespace boost::heap;
 
+int delaySolve = 0;
+
 void drawPath(Maze &, int);
 
 int ManhattanHeuristic(Maze &m, Vertex u, int finishID);
