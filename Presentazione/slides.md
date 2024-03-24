@@ -6,7 +6,7 @@ theme : "cern"
 
 ---
 
-#  Contenuti
+###  Contenuti
 - Caratteristiche di un buon labirinto
 - Struttura dati
 - Generazione: RandomDFS
@@ -14,6 +14,7 @@ theme : "cern"
     - Dimostrazione ammissibilità
     - Ottimalità con coerenza
     - Applicazione a un labirinto
+- Riferimenti
 
 ---
 
@@ -51,7 +52,7 @@ struttura interna &rarr; **grafo non orientato come lista di adiacenza "potenzia
 
 **complessità spaziale:**
 - O(N*M) vettore di vertici
-- O(N\*M) lista di adiacenza come vettore di vettori (sarebbe <4\*N*M)
+- O(N\*M) lista di adiacenza "potenziale" come vettore di vettori (grado di ogni vertice $\leq$ 4\*N*M)
 
 ---
 
@@ -61,13 +62,15 @@ struttura interna &rarr; **grafo non orientato come lista di adiacenza "potenzia
 
 ### DFS ...
 - si utilizza la capacità del Depth First Search di generare un albero di copertura &rarr; Ogni punto è raggiungibile &#x2714;
-- DFS seleziona gli archi "da aprire" &rarr; lista di adiacenza del labirinto è quella senza muri
+- DFS seleziona gli archi "da aprire" &rarr; lista di adiacenza "vera" del labirinto è quella "potenziale" senza muri
+- &rarr; Complessità spaziale rimane sempre la stessa per ragioni "visive" 
 
 ---
 
 ### ... randomizzato
 
-- DFS non randomizzato crea un unico lungo corridoio in base a come è inizializzata la lista 
+- DFS non randomizzato crea un unico lungo corridoio in base a come è inizializzata la lista (vd sotto)
+**RandomDFS:**
 - scelgo un vertice adiacente a caso non ancora visitato e lo visito
 - appena arrivo a un punto dove non ci sono più mosse disponibili "chiudo" il vertice e faccio il backtracking
 - A causa della scelta random è meglio usare uno stack esplicito dove salvare i vertici "in progress"/Grey invece di una chiamata ricorsiva
@@ -101,7 +104,7 @@ struttura interna &rarr; **grafo non orientato come lista di adiacenza "potenzia
 
 WORST CASE:
 - **Complessità spaziale:** O(|V|)=O(N*M) &larr; caso "serpentone"
-- **Complessità temporale:**  O(|V|+|E|)=O(N*M) &larr; 4 adiacenti per ogni vertice al massimo
+- **Complessità temporale:**  O(|V|+|E|)=O(N*M) &larr; al massimo 4 adiacenti possibili per la scelta per ogni vertice
 
 ---
 
@@ -128,11 +131,12 @@ WORST CASE:
 ---
 
 ## A* search
-- inventato nel 1968
-- Classe di algoritmi **euristici**
+- Algoritmo del 1968
+- In realtà è una classe di algoritmi **euristici** che ha come parametro l'euristica scelta
 - Lavora su grafi pesati &rarr; labirinto: **tutti i pesi sono 1**
-- **INFORMED SEARCH** vs **UNINFORMED SEARCH** (Dijkstra)
-- Come Dijkstra A* minimizza una funzione $\tilde{f}(n)$  
+- Come Dijkstra, A* **minimizza** una funzione $\tilde{f}(n)$
+- ma **INFORMED SEARCH** vs **UNINFORMED SEARCH** (Dijkstra,BFS,DFS)  
+
 - A* ottimo sotto euristica:
     - **Ammissibile**: $\tilde{h}(n)\leq h(n)$ &rarr; A* trova lo shortest path
     - **Coerente (Consistent):** $h(m,n) + \tilde{h}(m)\leq \tilde{h}(n)$ &rarr; A* esplora meno vertici rispetto ad altri algoritmi ammissibili 
@@ -140,7 +144,7 @@ WORST CASE:
 ---
 
 ## pseudocodice
-<pre><code data-line-numbers> A*(G,start,goal)
+<pre><code data-line-numbers> A*(G,start,goal) //N.B. necessità di un goal!
     reset(maze); //O(N*M)
 
     start.g=0;
@@ -184,9 +188,6 @@ WORST CASE:
         se u=GOAL: exit;
         per adj in adjList(u) //con edge=OPEN
             costo = u.gTilde + w(u,adj) //u.gTilde = costo "so far" di u
-
-            // se adj non ancora espanso
-            // o il nuovo costo passando per u è minore del precedente 
             se (adj.col=WHITE oppure costo < adj.gTilde):
                 adj.gTilde = costo;
                 adj.fTilde = adj.gTilde + h(adj,goal);
@@ -202,8 +203,9 @@ WORST CASE:
     - O(|V|) resetMaze
     - O(|V|log|V|) per il pop in OPEN
     - O(|E|log|E|) per il push/update in OPEN considerando che ogni vertice chiuso non viene riaperto con un'euristica coerente &rarr; ogni vertice viene aggiunto una sola volta
-    - TOTALE O((|V|+|E|)\*log|V|)=O(N\*M\*log(N\*M))
-    - **N.B.**: il costo temporale dipende fortemente dalla funzione h(n,m) che non può essere conosciuta a priori rispetto al problema da risolvere 
+    - O(|E|log|E|*f(|V|)) per il calcolo di h(n,m), generalmente O(1)
+    - **TOTALE** O((|V|+|E|\*f(|V|))\*log|V|)=O(N\*M\*log(N\*M)\*f(|V|))
+<!--    - **N.B.**: il costo temporale dipende fortemente dalla funzione h(n,m) che non può essere conosciuto a priori --> 
 
 ---
 
@@ -243,7 +245,7 @@ A* è ammissibile se trova il percorso ottimo (quindi di costo minore) da s a t 
 
 - $s\equiv$ vertice iniziale --> 
 
-<img src="Fn.png" width=40%>
+<img src="Fn.png" width=30%>
 
 - $P*\equiv(m,n)$ percorso ottimo (di costo minimo) tra m ed n
 
@@ -253,7 +255,7 @@ A* è ammissibile se trova il percorso ottimo (quindi di costo minore) da s a t 
 
 - $f(n)\equiv$ costo reale di P*(s,t) vincolato attraverso n ($f(s)=h(s)$ costo di P*(s,t) non vincolato)
 
-&rarr; $f(n)=g(n)+h(n)$
+&rarr; **$f(n)=g(n)+h(n)$**
 
 ---
 
@@ -309,11 +311,12 @@ Per ogni nodo m ed n vale la disuguaglianza triangolare
 
 $h(m,n)+\tilde{h}(m) \geq \tilde{h}(n)$
 
-p.e. distanza in linea d'aria $d$
+con h(m,n) distanza lungo P*. 
+Considerando la distanza in linea d'aria $d$
 
 $h(m,n) \geq d(m,n)$ &rarr; $h(m,n)+\tilde{h}(m) \geq d(m,n)+\tilde{h}(m) \geq \tilde{h}(n)$
 
-## disegnetto
+<img src="EuConsistent.png" width=40%>
 
 ---
 
@@ -324,7 +327,7 @@ $h(m,n) \geq d(m,n)$ &rarr; $h(m,n)+\tilde{h}(m) \geq d(m,n)+\tilde{h}(m) \geq \
 
 Vale $=$ sse A espande gli stessi nodi di A*
 
-Per dimostrarlo si nota che sotto euristica coerente se un nodo n è già stato chiuso &rarr; è stato già trovato il P*(s,n) &rarr; $\tilde{g}(n)=g(n)$ &rarr; n non verrà mai riaperto.
+Per dimostrarlo si nota che sotto euristica coerente se un nodo n è già stato CHIUSO &rarr; è stato già trovato il P*(s,n) &rarr; $\tilde{g}(n)=g(n)$ &rarr; n non verrà mai riaperto.
 
 ---
 
@@ -332,7 +335,7 @@ Per dimostrarlo si nota che sotto euristica coerente se un nodo n è già stato 
 
 ---
 
-## Euristica
+### Euristica
 
 Come buona euristica è naturale considerare la **Manhattan distance** ($L_1$) in 2D:
 
@@ -341,6 +344,12 @@ $|x_1-x_2|+|y_1-y_2|$
 in quanto è la distanza che si avrebbe nel caso in cui non ci fossero muri.
 
 Si dimostra che questa metrica è coerente.
+
+<img src="mDist.png" width=30%>
+
+--
+
+# Dim
 
 ---
 
@@ -351,4 +360,22 @@ Se si considerano diversi algoritmi, è facile vedere come effettivamente A* nel
 Complessità effettiva
 Considerando un branching medio b
 nodo depth d
+
+Att a mettere coppie giuste + mettere vertice colore iniziale giusto!
+
+---
+
+### A* vs..
+
+<img src="AStar.png" width=40%>
+
+### ... BFS
+
+<img src="BFS.png" width=40%>
+
+---
+
+## Riferimenti
+
+
 
