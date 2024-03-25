@@ -48,11 +48,11 @@ struttura interna &rarr; **grafo non orientato come lista di adiacenza "potenzia
 - vertici = caselle
 - archi = passaggi tra le caselle
 - vettore di N*M vertici 
-- ogni vertice ha *almeno* 4 adiacenti, a parte i vertici al bordo &rarr; Bordo ben definito dalla connettività &#x2714;
+- ogni vertice ha *non più di* 4 adiacenti, a parte i vertici al bordo &rarr; Bordo ben definito dalla connettività &#x2714;
 
 **complessità spaziale:**
 - O(N*M) vettore di vertici
-- O(N\*M) lista di adiacenza "potenziale" come vettore di vettori (grado di ogni vertice $\leq$ 4\*N*M)
+- O(N\*M) lista di adiacenza "potenziale" come vettore di vettori (grado di ogni vertice $\leq$ 4)
 
 ---
 
@@ -78,6 +78,8 @@ struttura interna &rarr; **grafo non orientato come lista di adiacenza "potenzia
 --
 
 ### DFS non randomizzato
+
+lista di adiacenza = &rarr; &larr; &darr; &uarr;
 
 <img src="Longcorridor.png" width=50%>
 
@@ -172,7 +174,7 @@ WORST CASE:
         for adj in adjList(u) //con edge=OPEN
             costo = u.gTilde + w(u,adj) //u.gTilde = costo "so far" di u
 
-            // if adj non ancora espanso
+            // se adj non ancora espanso
             // o il nuovo costo passando per u è minore del precedente 
             if (adj.col=WHITE or costo < adj.gTilde):
                 adj.gTilde = costo;
@@ -252,7 +254,7 @@ Essendo stato applicato a un labirinto, ossia una struttura t.c. tutti i punti s
 
 ---
 
-## Definizione della funzione di stima $\tilde{f}$
+### Definizione della funzione $f$
 
 <!-- - $t\equiv$ vertice target 
 
@@ -260,7 +262,7 @@ Essendo stato applicato a un labirinto, ossia una struttura t.c. tutti i punti s
 
 <img src="Fn.png" width=30%>
 
-- $P*\equiv(m,n)$ percorso ottimo (di costo minimo) tra m ed n
+- $P*(m,n)\equiv$ percorso ottimo (di costo minimo) tra m ed n
 
 - $g(n)\equiv$ costo di P*(s,n)
 
@@ -272,7 +274,7 @@ Essendo stato applicato a un labirinto, ossia una struttura t.c. tutti i punti s
 
 ---
 
-## Definizione della funzione di stima $\tilde{f}$
+### Definizione della funzione di stima $\tilde{f}$
 
 **$f(n)=g(n)+h(n)$ &rarr; stimato $\tilde{f}(n)=\tilde{g}(n)+\tilde{h}(n)$**
 
@@ -331,18 +333,18 @@ Se $\tilde{h}(n) \leq h(n)$ $\forall n$, allora A* è ammissibile.
 
 --
 
-# Dimostrazione
+### Dimostrazione
 
 P.A. A* termina in t con $\tilde{f}(t)=\tilde{g}(t)>f(s)$.
 
 N.B. $f(s)=h(s)=g(t)$ costo P*(s,t) unconstrained
 
-Per il corollario prima della terminazione esiste n' APERTO su P* t.c. $\tilde{f}(n')\leq f(s) < \tilde{f}(t)$.
+Per il corollario, prima della terminazione esiste n' APERTO su P* t.c. $\tilde{f}(n')\leq f(s) < \tilde{f}(t)$.
 &rarr; n' dovrebbe essere espanso prima di t &rarr; impossibile che A* abbia terminato
 
 ---
 
-# Ottimalità di A* sotto euristica coerente
+## Ottimalità di A* sotto euristica coerente
 
 ---
 
@@ -368,6 +370,8 @@ $h(m,n) \geq d(m,n)$ &rarr; $h(m,n)+\tilde{h}(m) \geq d(m,n)+\tilde{h}(m) \geq \
 
 Vale $=$ sse A espande gli stessi nodi di A*
 
+Infatti per esempio A* con $\tilde{h}=0$ si riconduce a Dijkstra
+
 Per dimostrarlo si nota che sotto euristica coerente se un nodo n è già stato CHIUSO &rarr; è stato già trovato il P*(s,n) &rarr; $\tilde{g}(n)=g(n)$ &rarr; n non verrà mai riaperto.
 
 ---
@@ -390,7 +394,7 @@ Si dimostra che questa metrica è coerente.
 
 ---
 
-# Confronto tra i vari algoritmi
+<!--# Confronto tra i vari algoritmi
 
 Se si considerano diversi algoritmi, è facile vedere come effettivamente A* nel caso di aggiunta di loops, quindi riomogeneiizando in terreno visiti molti meno nodi a un costo però di Update e add nello heap. La sua efficacia è molto maggiore nel caso di grafi pesati e spazi più grandi senza troppi "ostacoli". Sicuramente visitando Dijkstra tanti nodi quanto BFS, e avendo stessa complessità di A* performa molto peggio.
 
@@ -400,7 +404,7 @@ nodo depth d
 
 Att a mettere coppie giuste + mettere vertice colore iniziale giusto!
 
----
+--->
 
 ### A* vs..
 
@@ -409,6 +413,8 @@ Att a mettere coppie giuste + mettere vertice colore iniziale giusto!
 ### ... BFS/Dijkstra
 
 <img src="BFS.png" width=40%>
+
+Viola &rarr; nodi esplorati
 
 ---
 

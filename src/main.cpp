@@ -7,6 +7,7 @@
 #include "maze.h"
 #include "mazeGen.h"
 #include "mazeSolve.h"
+#include "vertex.h"
 
 using namespace std;
 
@@ -59,6 +60,29 @@ int main(int argc, char *argv[]) {
   int start;
   int finish;
   srand(time(NULL)); // initialize seed for maze generation
+
+  if (argc != 1 && *argv[1] == '0') { // just plain generation
+    delayGen = 0;
+    delayInBetween = 5000;
+
+    start = 1000;
+    finish = 0;
+    Maze m(50, 50);
+    m.initGrid(start, finish);
+    m.vertices[start].type = NONE;
+    m.vertices[finish].type = NONE;
+
+    thread drawMaze(draw, ref(m));
+
+    RandomDFS(m, 0);
+    m.resetMaze();
+    this_thread::sleep_for(chrono::milliseconds(delayInBetween));
+    m.addRandomLoops(1000);
+
+    drawMaze.join();
+
+    return 0;
+  }
 
   if (argc != 1 && *argv[1] == 'a') { // gen+solve w/delay
     delayGen = 1;
