@@ -55,31 +55,223 @@ int main(int argc, char *argv[]) {
     // return 0;
   }
 
+  int delayInBetween = 0;
   int start;
   int finish;
+  srand(time(NULL)); // initialize seed for maze generation
 
   if (argc != 1 && *argv[1] == 'a') { // gen+solve w/delay
-    delayGen = 0;
+    delayGen = 1;
     delaySolve = 1;
 
-    Maze m(100, 100); // width and height
-    start = 5050;
-    finish = 0;
+    // Maze m(100, 100); // width and height
+    // start = 5050;
+    // finish = 0;
+    Maze m(50, 50);
+    start = 1025;
+    finish = 3;
     m.initGrid(start, finish);
 
-    srand(time(NULL));
     thread drawMaze(draw, ref(m));
 
-    DFSGenNoRecursion(m, 0);
+    RandomDFS(m, 0);
     m.addRandomLoops(1000);
+    // m.addRandomLoops(1000);
     m.setWeight();
 
     AStarSolve(m, start, finish);
+
+    cout << "finished solving" << endl;
 
     drawMaze.join();
 
     return 0;
   }
+
+  else if (argc != 1 && *argv[1] == 'b') { // solve DFS+BFS+Dijkstra+A*
+
+    delayInBetween = 5000;
+    delayGen = 0;
+    delaySolve = 0;
+
+    Maze m(180, 100); // width and height
+    start = 9090;
+    finish = 90;
+    m.initGrid(start, finish);
+
+    thread drawMaze(draw, ref(m));
+
+    Timer t;
+    RandomDFS(m, 0);
+    cout << "maze generated in " << t.elapsed() << endl << endl;
+    this_thread::sleep_for(chrono::milliseconds(delayInBetween));
+
+    m.addRandomLoops(5000);
+    m.setWeight();
+
+    t.reset();
+    DFSsolve(m, start);
+    cout << "maze solved in " << t.elapsed() << endl << endl;
+    this_thread::sleep_for(chrono::milliseconds(delayInBetween));
+
+    t.reset();
+    BFSsolve(m, start);
+    cout << "maze solved in " << t.elapsed() << endl << endl;
+    this_thread::sleep_for(chrono::milliseconds(delayInBetween));
+
+    t.reset();
+    DijkstraSolve(m, start);
+    cout << "maze solved in " << t.elapsed() << endl << endl;
+    this_thread::sleep_for(chrono::milliseconds(delayInBetween));
+
+    t.reset();
+    AStarSolve(m, start, finish);
+    cout << "maze solved in " << t.elapsed() << endl << endl;
+    this_thread::sleep_for(chrono::milliseconds(delayInBetween));
+
+    cout << "finished solving" << endl;
+
+    drawMaze.join();
+
+    return 0;
+  }
+
+  else if (argc != 1 &&
+           *argv[1] == 'c') { // solve DFS+BFS+Dijkstra+A* just time
+
+    delayInBetween = 0;
+    delayGen = 0;
+    delaySolve = 0;
+
+    Maze m(180, 100); // width and height
+    start = 9090;
+    finish = 90;
+    m.initGrid(start, finish);
+
+    Timer t;
+    RandomDFS(m, 0);
+    cout << "maze generated in " << t.elapsed() << endl << endl;
+    this_thread::sleep_for(chrono::milliseconds(delayInBetween));
+
+    m.addRandomLoops(5000);
+    m.setWeight();
+
+    t.reset();
+    DFSsolve(m, start);
+    cout << "maze solved in " << t.elapsed() << endl << endl;
+    this_thread::sleep_for(chrono::milliseconds(delayInBetween));
+
+    t.reset();
+    BFSsolve(m, start);
+    cout << "maze solved in " << t.elapsed() << endl << endl;
+    this_thread::sleep_for(chrono::milliseconds(delayInBetween));
+
+    t.reset();
+    DijkstraSolve(m, start);
+    cout << "maze solved in " << t.elapsed() << endl << endl;
+    this_thread::sleep_for(chrono::milliseconds(delayInBetween));
+
+    t.reset();
+    AStarSolve(m, start, finish);
+    cout << "maze solved in " << t.elapsed() << endl << endl;
+    this_thread::sleep_for(chrono::milliseconds(delayInBetween));
+
+    cout << "finished solving" << endl;
+
+    return 0;
+  }
+
+  else if (argc != 1 && *argv[1] == 'd') { // solve DFS+BFS+Dijkstra+A* no loops
+
+    delayInBetween = 5000;
+    delayGen = 0;
+    delaySolve = 0;
+
+    Maze m(180, 100); // width and height
+    start = 9090;
+    finish = 90;
+    m.initGrid(start, finish);
+
+    thread drawMaze(draw, ref(m));
+
+    Timer t;
+    RandomDFS(m, 0);
+    cout << "maze generated in " << t.elapsed() << endl << endl;
+    this_thread::sleep_for(chrono::milliseconds(delayInBetween));
+
+    m.setWeight();
+
+    t.reset();
+    DFSsolve(m, start);
+    cout << "maze solved in " << t.elapsed() << endl << endl;
+    this_thread::sleep_for(chrono::milliseconds(delayInBetween));
+
+    t.reset();
+    BFSsolve(m, start);
+    cout << "maze solved in " << t.elapsed() << endl << endl;
+    this_thread::sleep_for(chrono::milliseconds(delayInBetween));
+
+    t.reset();
+    DijkstraSolve(m, start);
+    cout << "maze solved in " << t.elapsed() << endl << endl;
+    this_thread::sleep_for(chrono::milliseconds(delayInBetween));
+
+    t.reset();
+    AStarSolve(m, start, finish);
+    cout << "maze solved in " << t.elapsed() << endl << endl;
+    this_thread::sleep_for(chrono::milliseconds(delayInBetween));
+
+    cout << "finished solving" << endl;
+
+    drawMaze.join();
+
+    return 0;
+  }
+
+  else if (argc != 1 &&
+           *argv[1] == 'e') { // solve DFS+BFS+Dijkstra+A* just time no loops
+
+    delayInBetween = 0;
+    delayGen = 0;
+    delaySolve = 0;
+
+    Maze m(180, 100); // width and height
+    start = 9090;
+    finish = 90;
+    m.initGrid(start, finish);
+
+    Timer t;
+    RandomDFS(m, 0);
+    cout << "maze generated in " << t.elapsed() << endl << endl;
+    this_thread::sleep_for(chrono::milliseconds(delayInBetween));
+
+    m.setWeight();
+
+    t.reset();
+    DFSsolve(m, start);
+    cout << "maze solved in " << t.elapsed() << endl << endl;
+    this_thread::sleep_for(chrono::milliseconds(delayInBetween));
+
+    t.reset();
+    BFSsolve(m, start);
+    cout << "maze solved in " << t.elapsed() << endl << endl;
+    this_thread::sleep_for(chrono::milliseconds(delayInBetween));
+
+    t.reset();
+    DijkstraSolve(m, start);
+    cout << "maze solved in " << t.elapsed() << endl << endl;
+    this_thread::sleep_for(chrono::milliseconds(delayInBetween));
+
+    t.reset();
+    AStarSolve(m, start, finish);
+    cout << "maze solved in " << t.elapsed() << endl << endl;
+    this_thread::sleep_for(chrono::milliseconds(delayInBetween));
+
+    cout << "finished solving" << endl;
+
+    return 0;
+  }
+
   //
   // int start = 9999;
   // int finish = 250;
@@ -89,49 +281,50 @@ int main(int argc, char *argv[]) {
   // start = 3; //crisi dfs in 100x100
   // finish = 100;
   // start = 7000;
-  // start = 3;
-  finish = 90;
-  start = 9000 + 90;
-  start = 20100;
-  finish = 200;
-
-  Maze m(200, 200); // width and height
-  // Maze m(180, 100);
-  m.initGrid(0, finish);
-  m.vertices[start].type = START;
-
-  srand(time(NULL));
-  thread drawMaze(draw, ref(m));
-
-  Timer t;
-  DFSGenNoRecursion(m, 0);
-  cout << "maze generated in " << t.elapsed() << endl << endl;
-
-  // m.addRandomLoops(3000); // dim/10
-  m.addRandomLoops(10000);
-  // m.print();
-  m.setWeight();
-
-  t.reset();
-  DFSsolve(m, start);
-  cout << "maze solved in " << t.elapsed() << endl << endl;
-  this_thread::sleep_for(chrono::milliseconds(5000));
-
-  t.reset();
-  BFSsolve(m, start);
-  cout << "maze solved in " << t.elapsed() << endl << endl;
-  this_thread::sleep_for(chrono::milliseconds(5000));
-
-  t.reset();
-  AStarSolve(m, start, finish);
-  cout << "maze solved in " << t.elapsed() << endl << endl;
-  this_thread::sleep_for(chrono::milliseconds(5000));
-
-  t.reset();
-  DijkstraSolve(m, start);
-  cout << "maze solved in " << t.elapsed() << endl << endl;
-
-  cout << "Finished solving ";
-
-  drawMaze.join();
+  //// start = 3;
+  // finish = 90;
+  // start = 9000 + 90;
+  // start = 20100;
+  // finish = 200;
+  //
+  // Maze m(200, 200); // width and height
+  //// Maze m(180, 100);
+  // m.initGrid(0, finish);
+  // m.vertices[start].type = START;
+  //
+  // srand(time(NULL));
+  // thread drawMaze(draw, ref(m));
+  //
+  // Timer t;
+  // RandomDFS(m, 0);
+  // cout << "maze generated in " << t.elapsed() << endl << endl;
+  //
+  //// m.addRandomLoops(3000); // dim/10
+  // m.addRandomLoops(10000);
+  //// m.print();
+  // m.setWeight();
+  //
+  // t.reset();
+  // DFSsolve(m, start);
+  // cout << "maze solved in " << t.elapsed() << endl << endl;
+  // this_thread::sleep_for(chrono::milliseconds(5000));
+  //
+  // t.reset();
+  // BFSsolve(m, start);
+  // cout << "maze solved in " << t.elapsed() << endl << endl;
+  // this_thread::sleep_for(chrono::milliseconds(5000));
+  //
+  // t.reset();
+  // AStarSolve(m, start, finish);
+  // cout << "maze solved in " << t.elapsed() << endl << endl;
+  // this_thread::sleep_for(chrono::milliseconds(5000));
+  //
+  // t.reset();
+  // DijkstraSolve(m, start);
+  // cout << "maze solved in " << t.elapsed() << endl << endl;
+  //
+  // cout << "Finished solving ";
+  //
+  // drawMaze.join();
+  return 0;
 }
