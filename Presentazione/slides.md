@@ -92,7 +92,7 @@ struttura interna &rarr; **grafo non orientato come lista di adiacenza "potenzia
         u = S.top(); //O(1)
         u.col=GREY;
         inizializzare vettore vertici AdjDisponibili/AdjWhite //O(4)=O(1)
-        se (AdjWhite non vuoto):
+        if (AdjWhite non vuoto):
             selezionare vertice random in AdjWhite;
             random.parent=u;
             breakWall(u,random); //O(4)=O(1)
@@ -126,6 +126,14 @@ WORST CASE:
 
 ---
 
+## same DFS generated maze without and with loops
+
+<img src="maze.png" width=40%>
+
+<img src="mazeWloops.png" width=41%>
+
+---
+
 # Risoluzione: A* search
 
 ---
@@ -133,10 +141,9 @@ WORST CASE:
 ## A* search
 - Algoritmo del 1968
 - In realtà è una classe di algoritmi **euristici** che ha come parametro l'euristica scelta
-- Lavora su grafi pesati &rarr; labirinto: **tutti i pesi sono 1**
+- Lavora su grafi orientati pesati &rarr; labirinto: **tutti i pesi sono 1**
 - Come Dijkstra, A* **minimizza** una funzione $\tilde{f}(n)$
 - ma **INFORMED SEARCH** vs **UNINFORMED SEARCH** (Dijkstra,BFS,DFS)  
-
 - A* ottimo sotto euristica:
     - **Ammissibile**: $\tilde{h}(n)\leq h(n)$ &rarr; A* trova lo shortest path
     - **Coerente (Consistent):** $h(m,n) + \tilde{h}(m)\leq \tilde{h}(n)$ &rarr; A* esplora meno vertici rispetto ad altri algoritmi ammissibili 
@@ -145,9 +152,11 @@ WORST CASE:
 
 ## pseudocodice
 <pre><code data-line-numbers> A*(G,start,goal) //N.B. necessità di un goal!
-    reset(maze); //O(N*M)
+    for v in G: //O(N*M)
+        v.gTilde=inf;
+        v.parent=null;
 
-    start.g=0;
+    start.gTilde=0;
     start.fTilde=h(start,goal);
     
     OPEN={start}; //minHeap
@@ -159,17 +168,17 @@ WORST CASE:
 
  <pre><code data-line-numbers data-ln-start-from="10"> while(OPEN non vuoto):
         estraggo u da OPEN con fTilde minimo; //log(N)
-        se u=GOAL: exit;
-        per adj in adjList(u) //con edge=OPEN
+        if u=GOAL: exit;
+        for adj in adjList(u) //con edge=OPEN
             costo = u.gTilde + w(u,adj) //u.gTilde = costo "so far" di u
 
-            // se adj non ancora espanso
+            // if adj non ancora espanso
             // o il nuovo costo passando per u è minore del precedente 
-            se (adj.col=WHITE oppure costo < adj.gTilde):
+            if (adj.col=WHITE or costo < adj.gTilde):
                 adj.gTilde = costo;
                 adj.fTilde = adj.gTilde + h(adj,goal);
                 adj.parent = u;
-                se adj not in OPEN //adj not GREY, se è BLACK lo riapro
+                if adj not in OPEN //adj not GREY, if è BLACK lo riapro
                     adj.col=GREY
                     OPEN.add(adj); //log(N) Binomial heap/O(1) Fibonacci Heap 
                 else OPEN.update(adj); //log(N)
@@ -185,14 +194,14 @@ WORST CASE:
 
 <pre><code data-line-numbers data-ln-start-from="10"> while(OPEN non vuoto):
         estraggo u da OPEN con fTilde minimo; //log(N)
-        se u=GOAL: exit;
-        per adj in adjList(u) //con edge=OPEN
+        if u=GOAL: exit;
+        for adj in adjList(u) //con edge=OPEN
             costo = u.gTilde + w(u,adj) //u.gTilde = costo "so far" di u
-            se (adj.col=WHITE oppure costo < adj.gTilde):
+            if (adj.col=WHITE or costo < adj.gTilde):
                 adj.gTilde = costo;
                 adj.fTilde = adj.gTilde + h(adj,goal);
                 adj.parent = u;
-                se adj not in OPEN //adj not GREY, se è BLACK lo riapro
+                if adj not in OPEN //adj not GREY, se è BLACK lo riapro
                     adj.col=GREY
                     OPEN.add(adj); //log(N) Binomial heap/O(1) Fibonacci Heap 
                 else OPEN.update(adj); //log(N)
@@ -202,10 +211,20 @@ WORST CASE:
 - **Temporale**:
     - O(|V|) resetMaze
     - O(|V|log|V|) per il pop in OPEN
-    - O(|E|log|E|) per il push/update in OPEN considerando che ogni vertice chiuso non viene riaperto con un'euristica coerente &rarr; ogni vertice viene aggiunto una sola volta
+    - O(|E|log|V|) per il push/update in OPEN considerando che ogni vertice chiuso non viene riaperto con un'euristica coerente &rarr; ogni vertice viene aggiunto una sola volta
     - O(|E|log|E|*f(|V|)) per il calcolo di h(n,m), generalmente O(1)
-    - **TOTALE** O((|V|+|E|\*f(|V|))\*log|V|)=O(N\*M\*log(N\*M)\*f(|V|))
+    - **TOTALE** O((|V|+|E|\*f(|V|))\*log|V|)=O(N\*M\*log(N\*M))
 <!--    - **N.B.**: il costo temporale dipende fortemente dalla funzione h(n,m) che non può essere conosciuto a priori --> 
+
+--
+
+**NOTA IMPORTANTE:**
+Essendo stato applicato a un labirinto, ossia una struttura t.c. tutti i punti sono raggiungibili tra loro, non è stato necessario aggiungere l'ultimo pezzo del codice, i.e.
+
+```
+// Open set is empty but goal was never reached
+    return failure
+```
 
 ---
 
@@ -233,13 +252,7 @@ WORST CASE:
 
 ---
 
-## Dimostrazione di ammissibilità di A*
-
-A* è ammissibile se trova il percorso ottimo (quindi di costo minore) da s a t per ogni $\delta$ grafo, i.e. ogni grafo i cui archi abbiano peso maggiore o uguale a $\delta> 0$
-
----
-
-### Definizione della funzione di stima $\tilde{f}$
+## Definizione della funzione di stima $\tilde{f}$
 
 <!-- - $t\equiv$ vertice target 
 
@@ -259,11 +272,11 @@ A* è ammissibile se trova il percorso ottimo (quindi di costo minore) da s a t 
 
 ---
 
-### Definizione della funzione di stima $\tilde{f}$
+## Definizione della funzione di stima $\tilde{f}$
 
 **$f(n)=g(n)+h(n)$ &rarr; stimato $\tilde{f}(n)=\tilde{g}(n)+\tilde{h}(n)$**
 
-- $\tilde{g}(n)\equiv$ stima del costo di P*(s,n), è preso come il costo "so far" del percorso meno costoso, quindi $\tilde{g}(n)\geq g(n)$
+- $\tilde{g}(n)\equiv$ stima del costo di P*(s,n), è preso come il costo minore trovato "so far" dall'algoritmo, quindi $\tilde{g}(n)\geq g(n)$
 
 - $\tilde{h}(n)\equiv$ stima del costo di P*(n,t), è **estraibile dal problema** p.e. nel caso in cui si considerasse una mappa, potrebbe essere la distanza in linea d'aria
 
@@ -271,23 +284,44 @@ A* è ammissibile se trova il percorso ottimo (quindi di costo minore) da s a t 
 
 ---
 
-## LEMMA
+## Dimostrazione di ammissibilità di A*
 
-Per ogni n NON CHIUSO e per ogni percorso ottimo P*(s,n), esiste n' su P* APERTO t.c. $\tilde{g}(n')=g(n)$
-
---
-
-# dim
+A* è ammissibile se trova il percorso ottimo (quindi di costo minore) da s a t per ogni $\delta$ grafo, i.e. ogni grafo i cui archi abbiano peso maggiore o uguale a $\delta> 0$
 
 ---
 
-## COROLLARIO
+## Lemma
 
-Supponendo $\tilde{h}(n) \leq h(n)$  $\forall n $ e supponendo che A* non abbia terminato, allora per ogni percorso ottimo P*(s,t) esiste n' su P* APERTO t.c. $f(n')\leq f(s)$ con $f(s)$ costo reale del percorso ottimo P*(s,t)
+Per ogni n NON CHIUSO e per ogni percorso ottimo P*(s,n), esiste n' su P* APERTO t.c. $\tilde{g}(n')=g(n)$
 
--- 
+## Corollario
 
-# dim
+Supponendo $\tilde{h}(n) \leq h(n)$  $\forall n $ e supponendo che A* non abbia terminato, allora per ogni percorso ottimo P*(s,t) esiste n' su P* APERTO t.c. $f(n')\leq f(s)$ con $f(s)$ costo reale del percorso ottimo P*(s,t).
+
+--
+
+### Dimostrazione Lemma
+
+$P*=(s=n_0,n_1,...n_k=n)$
+
+- se s NON APERTO &rarr; n'=s &rarr; $\tilde{g}(s)=g(s)=0$ Q.E.D.
+- se s CHIUSO
+    Sia $\Delta={{n_i} su P* CHIUSO t.c. $\tilde{g}(n_i)=g(n_i)}$
+    $\Delta \neq \emptyset$ poichè $s\in\Delta$
+    Sia n* elemento in $\Delta$ con indice più alto
+    &rarr; $n*\neq n$ poichè n NON CHIUSO
+    Sia n' successore di n* su P* (può essere che n'=n)
+    &rarr; $\tilde{g}(n') \leq \tilde{g}(n*) +  w(n*,n')$ per def di $\tilde{g}$
+    (n' APERTO e n* CHIUSO &rarr; quindi passata la condizione $\tilde{g}(n*)+w(n*,n')<\tilde{g}(n')$ o $\tilde{g}(n')$ era già minore o si aggiorna all'altro)
+    $\tilde{g}(n*)=g(n*)$ poichè $n*\in\Delta$
+    e $g(n')=g(n*)+w(n*,n')$ poichè su P*
+    &rarr; $\tilde{g}(n')\leq g(n')$ &rarr; ma in gen $\tilde{g}(n')\geq g(n') &rarr; \tilde{g}(n')=g(n')$ con $n'\in OPEN$. Q.E.D.
+
+--
+
+### Dimostrazione Corollario
+
+per il lemma esiste n' APERTO su P* t.c. $\tilde{g}(n')=g(n')$ &rarr; $\tilde{f}(n')=\tilde{g}(n')+\tilde{h}(n')=g(n')+\tilde{h}(n')\leq g(n')+h(n')=f(n')=f(s)$ con n' su P*
 
 ---
 
@@ -297,7 +331,14 @@ Se $\tilde{h}(n) \leq h(n)$ $\forall n$, allora A* è ammissibile.
 
 --
 
-# dim
+# Dimostrazione
+
+P.A. A* termina in t con $\tilde{f}(t)=\tilde{g}(t)>f(s)$.
+
+N.B. $f(s)=h(s)=g(t)$ costo P*(s,t) unconstrained
+
+Per il corollario prima della terminazione esiste n' APERTO su P* t.c. $\tilde{f}(n')\leq f(s) < \tilde{f}(t)$.
+&rarr; n' dovrebbe essere espanso prima di t &rarr; impossibile che A* abbia terminato
 
 ---
 
@@ -347,10 +388,6 @@ Si dimostra che questa metrica è coerente.
 
 <img src="mDist.png" width=30%>
 
---
-
-# Dim
-
 ---
 
 # Confronto tra i vari algoritmi
@@ -369,7 +406,7 @@ Att a mettere coppie giuste + mettere vertice colore iniziale giusto!
 
 <img src="AStar.png" width=40%>
 
-### ... BFS
+### ... BFS/Dijkstra
 
 <img src="BFS.png" width=40%>
 
@@ -377,5 +414,8 @@ Att a mettere coppie giuste + mettere vertice colore iniziale giusto!
 
 ## Riferimenti
 
+<https://web.archive.org/web/20160322055823/http://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf>
+
+<http://theory.stanford.edu/~amitp/GameProgramming/>
 
 
