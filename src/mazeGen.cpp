@@ -1,9 +1,9 @@
 #include "mazeGen.h"
 
 // DFS maze generation from a start vertex using an explicit stack
-void DFSGenNoRecursion(Maze &m, int start) {
+void RandomDFS(Maze &m, int start) {
 
-  cout << "Generating maze with DFS with explicit stack data structure..."
+  cout << "Generating maze with randomDFS with explicit stack data structure..."
        << endl
        << endl;
 
