@@ -21,7 +21,7 @@ theme : "cern"
 ### Caratteristiche di un buon labirinto
 - Ha un bordo ben definito
 - Ogni punto deve poter essere raggiungibile
-- non è "noioso"
+- non è banale
 
 ---
 
@@ -262,7 +262,7 @@ Essendo stato applicato a un labirinto, ossia una struttura t.c. tutti i punti s
 
 <img src="Fn.png" width=30%>
 
-- $P*(m,n)\equiv$ percorso ottimo (di costo minimo) tra m ed n
+- $P^*(m,n)\equiv$ percorso ottimo (di costo minimo) tra m ed n
 
 - $g(n)\equiv$ costo di P*(s,n)
 
@@ -308,8 +308,9 @@ $P*=(s=n_0,n_1,...n_k=n)$
 
 - se s NON APERTO &rarr; n'=s &rarr; $\tilde{g}(s)=g(s)=0$ Q.E.D.
 - se s CHIUSO
-    Sia $\Delta={{n_i} su P* CHIUSO t.c. $\tilde{g}(n_i)=g(n_i)}$
-    $\Delta \neq \emptyset$ poichè $s\in\Delta$
+    
+    Sia $\Delta= {{n_i}\text{ su P* CHIUSO t.c. } \tilde{g}(n_i)=g(n_i)}$ , $\Delta \neq \emptyset$ poichè $s\in\Delta$
+    
     Sia n* elemento in $\Delta$ con indice più alto
     &rarr; $n*\neq n$ poichè n NON CHIUSO
     Sia n' successore di n* su P* (può essere che n'=n)
@@ -413,8 +414,6 @@ Att a mettere coppie giuste + mettere vertice colore iniziale giusto!
 ### ... BFS/Dijkstra
 
 <img src="BFS.png" width=40%>
-
-Viola &rarr; nodi esplorati
 
 ---
 
