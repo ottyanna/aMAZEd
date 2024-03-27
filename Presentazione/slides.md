@@ -48,7 +48,7 @@ struttura interna &rarr; **grafo non orientato come lista di adiacenza "potenzia
 - vertici = caselle
 - archi = passaggi tra le caselle
 - vettore di N*M vertici 
-- ogni vertice ha *non più di* 4 adiacenti, a parte i vertici al bordo &rarr; Bordo ben definito dalla connettività &#x2714;
+- ogni vertice ha 4 adiacenti, a parte i vertici al bordo &rarr; Bordo ben definito dalla connettività &#x2714;
 
 **complessità spaziale:**
 - O(N*M) vettore di vertici
@@ -154,7 +154,7 @@ WORST CASE:
 
 ## pseudocodice
 <pre><code data-line-numbers> A*(G,start,goal) //N.B. necessità di un goal!
-    for v in G: //O(N*M)
+    for v in V: //O(N*M)
         v.gTilde=inf;
         v.parent=null;
 
@@ -180,7 +180,7 @@ WORST CASE:
                 adj.gTilde = costo;
                 adj.fTilde = adj.gTilde + h(adj,goal);
                 adj.parent = u;
-                if adj not in OPEN //adj not GREY, if è BLACK lo riapro
+                if adj not in OPEN //adj not GREY, se è BLACK lo riapro
                     adj.col=GREY
                     OPEN.add(adj); //log(N) Binomial heap/O(1) Fibonacci Heap 
                 else OPEN.update(adj); //log(N)
@@ -214,7 +214,7 @@ WORST CASE:
     - O(|V|) resetMaze
     - O(|V|log|V|) per il pop in OPEN
     - O(|E|log|V|) per il push/update in OPEN considerando che ogni vertice chiuso non viene riaperto con un'euristica coerente &rarr; ogni vertice viene aggiunto una sola volta
-    - O(|E|log|E|*f(|V|)) per il calcolo di h(n,m), generalmente O(1)
+    - O(|E|log|V|*f(|V|)) per il calcolo di h(n,m), generalmente O(1)
     - **TOTALE** O((|V|+|E|\*f(|V|))\*log|V|)=O(N\*M\*log(N\*M))
 <!--    - **N.B.**: il costo temporale dipende fortemente dalla funzione h(n,m) che non può essere conosciuto a priori --> 
 
@@ -268,7 +268,7 @@ Essendo stato applicato a un labirinto, ossia una struttura t.c. tutti i punti s
 
 - $h(n)\equiv$ costo di P*(n,t) 
 
-- $f(n)\equiv$ costo reale di P*(s,t) vincolato attraverso n ($f(s)=h(s)$ costo di P*(s,t) non vincolato)
+- $f(n)\equiv$ costo totale di P*(s,t) vincolato attraverso n ($f(s)=h(s)$ costo di P*(s,t) non vincolato)
 
 &rarr; **$f(n)=g(n)+h(n)$**
 
@@ -294,7 +294,7 @@ A* è ammissibile se trova il percorso ottimo (quindi di costo minore) da s a t 
 
 ## Lemma
 
-Per ogni n NON CHIUSO e per ogni percorso ottimo P*(s,n), esiste n' su P* APERTO t.c. $\tilde{g}(n')=g(n)$
+Per ogni n NON CHIUSO e per ogni percorso ottimo P*(s,n), esiste n' su P* APERTO t.c. $\tilde{g}(n')=g(n')$
 
 ## Corollario
 
@@ -356,6 +356,7 @@ Per ogni nodo m ed n vale la disuguaglianza triangolare
 $h(m,n)+\tilde{h}(m) \geq \tilde{h}(n)$
 
 con h(m,n) distanza lungo P*. 
+
 Considerando la distanza in linea d'aria $d$
 
 $h(m,n) \geq d(m,n)$ &rarr; $h(m,n)+\tilde{h}(m) \geq d(m,n)+\tilde{h}(m) \geq \tilde{h}(n)$
