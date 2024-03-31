@@ -39,7 +39,7 @@ rappresentazione "visiva" &rarr; **griglia 2D NxM**
 
 4 movimenti possibili &rarr; &larr; &darr; &uarr;
 
-<img src="Griglia.png" width="40%">
+<img src="images/Griglia.png" width="40%">
 
 <!-- - N=#colonne, M=#righe 
 - 4 possibili movimenti &rarr; &larr; &darr; &uarr; -->
@@ -85,7 +85,7 @@ struttura interna &rarr; **grafo non orientato come lista di adiacenza "potenzia
 
 lista di adiacenza = &rarr; &larr; &darr; &uarr;
 
-<img src="Longcorridor.png" width=50%>
+<img src="images/Longcorridor.png" width=50%>
 
 ---
 
@@ -116,27 +116,27 @@ WORST CASE:
 
 # Esempio
 
-<img src="Dfs 1.png" width=50%>
+<img src="images/Dfs 1.png" width=50%>
 
 --
 
 # Esempio
 
-<img src="Dfs 2.png" width=50%>
+<img src="images/Dfs 2.png" width=50%>
 
 --
 
 # Esempio
 
-<img src="Dfs 3.png" width=50%>
+<img src="images/Dfs 3.png" width=50%>
 
 ---
 
 ## same DFS generated maze without and with loops
 
-<img src="maze.png" width=40%>
+<img src="images/maze.png" width=40%>
 
-<img src="mazeWloops.png" width=41%>
+<img src="images/mazeWloops.png" width=41%>
 
 ---
 
@@ -236,25 +236,25 @@ Essendo stato applicato a un labirinto, ossia una struttura t.c. tutti i punti s
 
 ## Esempio A*
 
-<img src="Astar 1.png" width=70%>
+<img src="images/Astar 1.png" width=70%>
 
 --
 
 ## Esempio A*
 
-<img src="Astar 2.png" width=70%>
+<img src="images/Astar 2.png" width=70%>
 
 --
 
 ## Esempio A*
 
-<img src="Astar 3.png" width=70%>
+<img src="images/Astar 3.png" width=70%>
 
 --
 
 ## Esempio A*
 
-<img src="Astar 4.png" width=70%>
+<img src="images/Astar 4.png" width=70%>
 
 ---
 
@@ -264,7 +264,7 @@ Essendo stato applicato a un labirinto, ossia una struttura t.c. tutti i punti s
 
 - $s\equiv$ vertice iniziale --> 
 
-<img src="Fn.png" width=30%>
+<img src="images/Fn.png" width=30%>
 
 - $P^*(m,n)\equiv$ percorso ottimo (di costo minimo) tra m ed n
 
@@ -368,7 +368,7 @@ Considerando la distanza in linea d'aria $d$
 
 $h(m,n) \geq d(m,n)$ &rarr; $h(m,n)+\tilde{h}(m) \geq d(m,n)+\tilde{h}(m) \geq \tilde{h}(n)$
 
-<img src="EuConsistent.png" width=40%>
+<img src="images/EuConsistent.png" width=40%>
 
 ---
 
@@ -399,7 +399,7 @@ in quanto è la distanza che si avrebbe nel caso in cui non ci fossero muri.
 
 Si dimostra che questa metrica è coerente.
 
-<img src="mDist.png" width=30%>
+<img src="images/mDist.png" width=30%>
 
 ---
 
@@ -417,11 +417,11 @@ Att a mettere coppie giuste + mettere vertice colore iniziale giusto!
 
 ### A* vs..
 
-<img src="AStar.png" width=40%>
+<img src="images/AStar.png" width=40%>
 
 ### ... BFS/Dijkstra
 
-<img src="BFS.png" width=40%>
+<img src="images/BFS.png" width=40%>
 
 ---
 
