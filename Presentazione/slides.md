@@ -4,6 +4,10 @@ theme : "cern"
 
 # Generazione e risoluzione di labirinti
 
+[Anna Spanò](https://github.com/ottyanna) - 27/03/24
+
+ <p><left><small>licensed under <a href="http://creativecommons.org/licenses/by/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY 4.0</a></small></left></p> 
+
 ---
 
 ###  Contenuti
@@ -298,8 +302,9 @@ Per ogni n NON CHIUSO e per ogni percorso ottimo P*(s,n), esiste n' su P* APERTO
 
 ## Corollario
 
-Supponendo $\tilde{h}(n) \leq h(n)$  $\forall n $ e supponendo che A* non abbia terminato, allora per ogni percorso ottimo P*(s,t) esiste n' su P* APERTO t.c. $f(n')\leq f(s)$ con $f(s)$ costo reale del percorso ottimo P*(s,t).
+Supponendo $\tilde{h}(n) \leq h(n)$  $\forall n $ e supponendo che A* non abbia terminato, allora per ogni percorso ottimo P*(s,t) esiste n' su P* APERTO t.c. $\tilde{f}(n')\leq f(s)$ con $f(s)$ costo reale del percorso ottimo P*(s,t).
 
+<!--
 --
 
 ### Dimostrazione Lemma
@@ -319,12 +324,14 @@ $P*=(s=n_0,n_1,...n_k=n)$
     $\tilde{g}(n*)=g(n*)$ poichè $n*\in\Delta$
     e $g(n')=g(n*)+w(n*,n')$ poichè su P*
     &rarr; $\tilde{g}(n')\leq g(n')$ &rarr; ma in gen $\tilde{g}(n')\geq g(n') &rarr; \tilde{g}(n')=g(n')$ con $n'\in OPEN$. Q.E.D.
-
+-->
+<!--
 --
 
 ### Dimostrazione Corollario
 
 per il lemma esiste n' APERTO su P* t.c. $\tilde{g}(n')=g(n')$ &rarr; $\tilde{f}(n')=\tilde{g}(n')+\tilde{h}(n')=g(n')+\tilde{h}(n')\leq g(n')+h(n')=f(n')=f(s)$ con n' su P*
+-->
 
 ---
 
