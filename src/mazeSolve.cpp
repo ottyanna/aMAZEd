@@ -98,8 +98,7 @@ bool DFSvisitSolve(Maze &m, Vertex *u) { // LIFO=Stack
   for (auto &v : m.adjList[u->id]) {
     if (v.adjPtr->color == WHITE && v.edgeType == OPEN) {
       v.adjPtr->parent = u;
-      if (DFSvisitSolve(m, v.adjPtr)) // TO REMOVE: se ha trovato il finish
-                                      // continua a ritornare true
+      if (DFSvisitSolve(m, v.adjPtr))
         return true;
     }
   }
@@ -123,9 +122,7 @@ void DFSsolve(Maze &m, int start) {
 
 /*Breath First Search*/
 
-void BFSsolve(Maze &m, int start) { // TO REMOVE: ma la distanza serve a noi???
-                                    // forse posso fare altri type e dire dist
-                                    // crescente da origine se voglio
+void BFSsolve(Maze &m, int start) {
 
   m.resetMaze();
 
@@ -170,8 +167,7 @@ void DijkstraSolve(Maze &m, int start) {
 
   MinHeap Q;
 
-  for (auto &u : m.vertices) // TO REMOVE: bisogna sempre passarlo per referenza
-  {
+  for (auto &u : m.vertices) {
     u.handle = Q.push(&u);
   }
 

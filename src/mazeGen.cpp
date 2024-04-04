@@ -74,11 +74,4 @@ void DFSGen(Maze &m, int start) {
   cout << "Generating maze with DFS..." << endl << endl;
 
   DFSvisit(m, &m.vertices[start]);
-
-  // TO REMOVE:
-  // utile nel caso della foresta qui partiamo da start e non ci torniamo più
-  // for (auto &u : m.vertices) {
-  //   if (u.color == WHITE)
-  //     DFSvisit(m, &u);
-  // }
 }
