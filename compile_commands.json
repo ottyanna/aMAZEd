@@ -1,0 +1,32 @@
+[
+{
+  "directory": "/home/anna/Documents/Uni/StruttDatiAlgo/aMAZEd/build",
+  "command": "/home/anna/.local/opt/miniconda3/envs/maze/bin/x86_64-conda-linux-gnu-c++ -DLib_EXPORTS -I/home/anna/Documents/Uni/StruttDatiAlgo/aMAZEd/include -fvisibility-inlines-hidden -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/anna/.local/opt/miniconda3/envs/maze/include -g -fPIC -o CMakeFiles/Lib.dir/src/maze.cpp.o -c /home/anna/Documents/Uni/StruttDatiAlgo/aMAZEd/src/maze.cpp",
+  "file": "/home/anna/Documents/Uni/StruttDatiAlgo/aMAZEd/src/maze.cpp",
+  "output": "CMakeFiles/Lib.dir/src/maze.cpp.o"
+},
+{
+  "directory": "/home/anna/Documents/Uni/StruttDatiAlgo/aMAZEd/build",
+  "command": "/home/anna/.local/opt/miniconda3/envs/maze/bin/x86_64-conda-linux-gnu-c++ -DLib_EXPORTS -I/home/anna/Documents/Uni/StruttDatiAlgo/aMAZEd/include -fvisibility-inlines-hidden -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/anna/.local/opt/miniconda3/envs/maze/include -g -fPIC -o CMakeFiles/Lib.dir/src/draw.cpp.o -c /home/anna/Documents/Uni/StruttDatiAlgo/aMAZEd/src/draw.cpp",
+  "file": "/home/anna/Documents/Uni/StruttDatiAlgo/aMAZEd/src/draw.cpp",
+  "output": "CMakeFiles/Lib.dir/src/draw.cpp.o"
+},
+{
+  "directory": "/home/anna/Documents/Uni/StruttDatiAlgo/aMAZEd/build",
+  "command": "/home/anna/.local/opt/miniconda3/envs/maze/bin/x86_64-conda-linux-gnu-c++ -DLib_EXPORTS -I/home/anna/Documents/Uni/StruttDatiAlgo/aMAZEd/include -fvisibility-inlines-hidden -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/anna/.local/opt/miniconda3/envs/maze/include -g -fPIC -o CMakeFiles/Lib.dir/src/mazeGen.cpp.o -c /home/anna/Documents/Uni/StruttDatiAlgo/aMAZEd/src/mazeGen.cpp",
+  "file": "/home/anna/Documents/Uni/StruttDatiAlgo/aMAZEd/src/mazeGen.cpp",
+  "output": "CMakeFiles/Lib.dir/src/mazeGen.cpp.o"
+},
+{
+  "directory": "/home/anna/Documents/Uni/StruttDatiAlgo/aMAZEd/build",
+  "command": "/home/anna/.local/opt/miniconda3/envs/maze/bin/x86_64-conda-linux-gnu-c++ -DLib_EXPORTS -I/home/anna/Documents/Uni/StruttDatiAlgo/aMAZEd/include -fvisibility-inlines-hidden -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/anna/.local/opt/miniconda3/envs/maze/include -g -fPIC -o CMakeFiles/Lib.dir/src/mazeSolve.cpp.o -c /home/anna/Documents/Uni/StruttDatiAlgo/aMAZEd/src/mazeSolve.cpp",
+  "file": "/home/anna/Documents/Uni/StruttDatiAlgo/aMAZEd/src/mazeSolve.cpp",
+  "output": "CMakeFiles/Lib.dir/src/mazeSolve.cpp.o"
+},
+{
+  "directory": "/home/anna/Documents/Uni/StruttDatiAlgo/aMAZEd/build",
+  "command": "/home/anna/.local/opt/miniconda3/envs/maze/bin/x86_64-conda-linux-gnu-c++  -I/home/anna/Documents/Uni/StruttDatiAlgo/aMAZEd/include -fvisibility-inlines-hidden -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/anna/.local/opt/miniconda3/envs/maze/include -g -o CMakeFiles/exe.dir/src/main.cpp.o -c /home/anna/Documents/Uni/StruttDatiAlgo/aMAZEd/src/main.cpp",
+  "file": "/home/anna/Documents/Uni/StruttDatiAlgo/aMAZEd/src/main.cpp",
+  "output": "CMakeFiles/exe.dir/src/main.cpp.o"
+}
+]
