@@ -70,9 +70,10 @@ $ cd build
 $ cmake -DBUILD_SHARED_LIBS=ON ..
 $ make
 ```
-
-#### For developers
+<details>
+  <summary>For developers</summary>
 If you want to look at the code with the right json run flag etc e debug etc and then move .json to main folder. Forse meglio se lo includo lo stesso alla prima release
+</details>
 
 ## Usage
 [&uarr; Back to top](#table-of-contents)
