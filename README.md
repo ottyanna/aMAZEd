@@ -45,6 +45,8 @@ $ conda env create -f requirements.yaml
 ```
 You must do this after the [downloading](#download-and-building) part.
 
+Nota son stranges sti requirements ultima riga----
+
 Note that this creates a `maze` conda environment that needs to be activated.
 
 ### Download and building
