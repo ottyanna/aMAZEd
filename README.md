@@ -87,7 +87,7 @@ The `[OPTIONS]` are:
 - `d` same as `b` but without loops
 - `e` same as `c` but without loops 
 
-Feel free to tweak the main to set delay and watch how the path finding algorithms work.
+Feel free to tweak the [`main.cpp`](/src/main.cpp) to set the delay variables and watch how the path finding algorithms work.
 
 ## Examples
 [&uarr; Back to top](#table-of-contents)
@@ -105,12 +105,12 @@ There is a little presentation of the project in the [Presentation folder](/Pres
 
 If you wish to contribute or you found any bug, feel free to open an issue or a pull request on the GitHub repository.
 
-# Release History
+## Release History
 [&uarr; Back to top](#table-of-contents)
 
 See changelooggggggg file
 
-# License 
+## License 
 [&uarr; Back to top](#table-of-contents)
 
 [GNU GPLv3.0](https://choosealicense.com/licenses/gpl-3.0/)
