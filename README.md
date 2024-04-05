@@ -1,4 +1,4 @@
-# aMAZEd
+<h1 align="center"> aMAZEd </h1>
 
 ![Static Badge](https://img.shields.io/badge/made%20with-C%2B%2B-gold?labelColor=indigo)
 ![Static Badge](https://img.shields.io/badge/license-GNU_GPLv3-gold?labelColor=indigo)
@@ -7,7 +7,7 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/ottyanna/aMAZEd?labelColor=indigo&color=gold)
 
 
-aMAZEd is a c++ program that lets you create and solve a rectangular maze rendered using OpenGL. It can be watched as it process the maze itself. 
+aMAZEd is a c++ program that lets you create and solve a rectangular maze rendered using OpenGL. It can be watched as it processes the maze itself. 
 
 The algorithms used for this project are RandomDFS for generation and A* search, DFS, BFS and Dijkstra for solving. It can be used as a tool for visualizing these algorithms as they work. See [Example and Description](#examples-and-description) section for a better understanding of colors.
 
@@ -24,10 +24,7 @@ The algorithms used for this project are RandomDFS for generation and A* search,
 - [Release History](#release-history)
 - [License](#license)
 
-## Installation
-
-Scriptino?
-
+## Installation 
 [&uarr; Back to top](#table-of-contents)
 
 ### Dependencies
@@ -43,8 +40,6 @@ If you're willing to use [`conda`](https://docs.conda.io/en/latest/), or if you 
 $ conda env create -f requirements.yaml
 ```
 You must do this after the [downloading](#download-and-building) part.
-
-Nota son stranges sti requirements ultima riga----
 
 Note that this creates a `maze` conda environment that needs to be activated.
 
@@ -72,6 +67,8 @@ $ make
 <details>
   <summary>For developers</summary>
 If you want to look at the code with the right json run flag etc e debug etc and then move .json to main folder. Forse meglio se lo includo lo stesso alla prima release
+if you want to develop add -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DCMAKE_BUILD_TYPE=Debug
+Move compile commands to main folder
 </details>
 
 ## Usage
@@ -132,22 +129,6 @@ See changelooggggggg file
 [GNU GPLv3.0](https://choosealicense.com/licenses/gpl-3.0/)
 
 ---
-
-
-
-
-
-
-aMAZEd is a C++ little program that lets you create a maze with DFS and then solves it with either DFS,BFS,Dijkstra and A*search.
-
-## Installation
-
-Before installing create a conda env and install the libraries contenute qui usando consa install (sono quelle dello yaml e cmake e boost forse args)
-
-To install clonate this repo and then run
-
-`cmake -DBUILD_SHARED_LIBS=ON ..`
-
-if you want to develop add -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DCMAKE_BUILD_TYPE=Debug
-
-Move compile commands to main folder
+<p align="center"> 
+<img alt="Static Badge" src="https://img.shields.io/badge/made%20with-%09%E2%99%A5%20-%20green?labelColor=indigo&color=salmon">
+</p>
