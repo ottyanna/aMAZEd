@@ -64,12 +64,13 @@ $ cd build
 $ cmake -DBUILD_SHARED_LIBS=ON ..
 $ make
 ```
-<details>
+<!--<details>
   <summary>For developers</summary>
 If you want to look at the code with the right json run flag etc e debug etc and then move .json to main folder. Forse meglio se lo includo lo stesso alla prima release
 if you want to develop add -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DCMAKE_BUILD_TYPE=Debug
 Move compile commands to main folder
 </details>
+-->
 
 ## Usage
 [&uarr; Back to top](#table-of-contents)
@@ -121,7 +122,7 @@ If you wish to contribute or you found any bug, feel free to open an issue or a 
 ## Release History
 [&uarr; Back to top](#table-of-contents)
 
-See changelooggggggg file
+See [CHANGELOG](/CHANGELOG.md) file.
 
 ## License 
 [&uarr; Back to top](#table-of-contents)
