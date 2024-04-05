@@ -1,3 +1,24 @@
+/*
+ * aMAZEd is a C++ program that creates and solves mazes
+ * Copyright (c) 2024 Anna Spanò
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+// Code adapted from Maze-solver bu MuMashhour:
+// https://github.com/MuMashhour/Maze-solver
+
 #include "draw.h"
 
 float zoomLevel = 1.0;
@@ -98,17 +119,6 @@ int draw(Maze &maze) {
                    scaleY * (y - 0.5) + translateY);
         glEnd();
 
-        // set size to 1 for a group of points
-        // glPointSize(5);
-        //
-        // glBegin(GL_POINTS);
-        //
-        // glColor3f(0.3, 0.3, 0);
-        // glVertex2f(scaleX * x + translateX, scaleY * y + translateY);
-        //
-        // glEnd();
-        //
-
         // walls size
         glLineWidth(lineWidth);
         // walls color
@@ -150,7 +160,7 @@ int draw(Maze &maze) {
                          scaleY * (y - 0.5) + translateY);
 
               glEnd();
-            } else if (u.adjPtr->id == pNode + 1) { // a sx // vertical walls
+            } else if (u.adjPtr->id == pNode + 1) { // a dx // vertical walls
 
               glBegin(GL_LINES);
 

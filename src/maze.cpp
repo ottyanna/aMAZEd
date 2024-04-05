@@ -1,3 +1,21 @@
+/*
+ * aMAZEd is a C++ program that creates and solves mazes
+ * Copyright (c) 2024 Anna Spanò
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 #include "maze.h"
 
 /*AdjListElement methods*/
@@ -83,7 +101,7 @@ void Maze::wallBreak(int indexVert, int indexAdj) {
   // loop in the adjacency list of the adjacent element and "break" that
   // wall,too. Maybe there is a better way to use symmetry.
   int newIndex = adjList[indexVert][indexAdj].adjPtr->id;
-  for (auto &u : adjList[newIndex]) { // TO REMOVE: att al &u!
+  for (auto &u : adjList[newIndex]) {
     if (u.adjPtr->id == indexVert) {
       u.edgeType = OPEN;
       break;
