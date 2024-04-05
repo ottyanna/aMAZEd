@@ -1,26 +1,25 @@
 # aMAZEd
 
-![Static Badge](https://img.shields.io/badge/made%20with-C%2B%2B-violet)
-![Static Badge](https://img.shields.io/badge/license-GNU_GPLv3-yellow) 
-![Static Badge](https://img.shields.io/badge/works%20on%20-my%20machine-blue)
-![GitHub last commit](https://img.shields.io/github/last-commit/ottyanna/aMAZEd?color=purple)
-![Static Badge](https://img.shields.io/badge/status-WIP-yellow)
+![Static Badge](https://img.shields.io/badge/made%20with-C%2B%2B-gold?labelColor=indigo)
+![Static Badge](https://img.shields.io/badge/license-GNU_GPLv3-gold?labelColor=indigo)
+![Static Badge](https://img.shields.io/badge/works%20on%20-my%20machine-gold?labelColor=indigo)
+![Static Badge](https://img.shields.io/badge/status-WIP-gold?labelColor=indigo)
+![GitHub last commit](https://img.shields.io/github/last-commit/ottyanna/aMAZEd?labelColor=indigo&color=gold)
 
 
 aMAZEd is a c++ program that lets you create and solve a rectangular maze rendered using OpenGL. It can be watched as it process the maze itself. 
 
-The algorithms used for this project are RandomDFS for generation and A* search, DFS, BFS and Dijkstra for solving. It can be used as a tool for visualizing these algorithms as they work.
+The algorithms used for this project are RandomDFS for generation and A* search, DFS, BFS and Dijkstra for solving. It can be used as a tool for visualizing these algorithms as they work. See [Example and Description](#examples-and-description) section for a better understanding of colors.
 
 ## Demo-Preview
-Immaginetta gif
+![mazeA*](/Presentazione/images/AStar.png)
 
 # Table of contents 
 - [Demo-Preview](#demo-preview)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Examples](#examples)
+- [Examples and description](#examples-and-description)
 - [Additional material (Italian only)](#additional-material-italian-only)
-- [Further developments](#further-developments)
 - [Contribute](#contribute)
 - [Release History](#release-history)
 - [License](#license)
@@ -77,6 +76,7 @@ If you want to look at the code with the right json run flag etc e debug etc and
 
 ## Usage
 [&uarr; Back to top](#table-of-contents)
+
 To execute the program run
 ```sh
 $ ./exe [OPTIONS]
@@ -90,18 +90,31 @@ The `[OPTIONS]` are:
 - `d` same as `b` but without loops
 - `e` same as `c` but without loops 
 
-Feel free to tweak the [`main.cpp`](/src/main.cpp) to set the delay variables and watch how the path finding algorithms work.
+Feel free to tweak the [`main.cpp`](/src/main.cpp) to set the delay variables and watch how the path finding algorithms work or change the dimension or the starting and ending point of the maze.
 
-## Examples
+## Examples and description
 [&uarr; Back to top](#table-of-contents)
+
+Running `./exe a` will generate the following:
+
+- the 50x50 maze with loops, where green and cyan represent the starting and ending points, respectively.
+
+   ![maze](/Presentazione/images/README/Screenshot%20from%202024-04-05%2012-40-52.png)
+
+- the shortest path in pink found by A*, where the violet and yellow represent the explored nodes.
+
+   ![solution](/Presentazione/images/README/Screenshot%20from%202024-04-05%2012-40-53.png)
+
 
 ## Additional material (Italian only)
 [&uarr; Back to top](#table-of-contents)
 
 There is a little presentation of the project in the [Presentation folder](/Presentazione). Feel free to check that out.
 
-## Further Developments
+<!--## Further Developments
 [&uarr; Back to top](#table-of-contents)
+
+-->
 
 ## Contribute
 [&uarr; Back to top](#table-of-contents)
