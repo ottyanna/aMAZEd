@@ -88,7 +88,7 @@ The `[OPTIONS]` are:
 - `d` same as `b` but without loops
 - `e` same as `c` but without loops 
 
-Feel free to tweak the [`main.cpp`](/src/main.cpp) to set the delay variables and watch how the path finding algorithms work or change the dimension or the starting and ending point of the maze.
+Feel free to tweak the [`main.cpp`](/src/main.cpp) to set the delay variables (in milliseconds) and watch how the path finding algorithms work or change the dimension or the starting and ending point of the maze.
 
 ## Examples and description
 [&uarr; Back to top](#table-of-contents)
