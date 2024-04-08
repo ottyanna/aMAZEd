@@ -35,7 +35,7 @@
 using namespace std;
 using namespace boost::heap;
 
-int delaySolve = 0;
+static int delaySolve = 0;
 
 void drawPath(Maze &, int);
 

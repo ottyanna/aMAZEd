@@ -27,7 +27,7 @@
 
 using namespace std;
 
-int delayGen = 0; // delay in milliseconds
+static int delayGen = 0; // delay in milliseconds
 
 void RandomDFS(Maze &, int);
 void DFSGen(Maze &, int);
